@@ -2,19 +2,26 @@
 
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		await queryInterface.createTable("country", {
+		await queryInterface.createTable("state", {
 			id: {
 				type: Sequelize.BIGINT,
 				primaryKey: true,
 				autoIncrement: true,
 				allowNull: false
 			},
+			country_id: {
+				type: Sequelize.BIGINT,
+				allowNull: false,
+				references: { model: "country", key: "id" },
+				onUpdate: "CASCADE",
+				onDelete: "CASCADE"
+			},
 			name: {
 				type: Sequelize.STRING,
 				allowNull: false
 			},
-			country_code: {
-				type: Sequelize.INTEGER,
+			abbreviation: {
+				type: Sequelize.STRING,
 				allowNull: false
 			},
 			created_at: {
@@ -29,6 +36,6 @@ module.exports = {
 	},
 
 	down: async (queryInterface, Sequelize) => {
-		await queryInterface.dropTable("country");
+		await queryInterface.dropTable("state");
 	}
 };

@@ -23,7 +23,7 @@ class CountrySupport {
 	}
 
 	async findAllCountries() {
-		return await request(api).get('/country').send();
+		return await request(api).get('/countries').send();
 	}
 
 	async findCountryByName(name) {

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/api/controllers/CountryController.js</title>
+    <title>Code coverage report for src/api/models/City.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,13 +19,13 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/api/controllers</a> CountryController.js</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/api/models</a> City.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/9</span>
+                <span class='fraction'>0/5</span>
             </div>
         
             
@@ -76,57 +76,45 @@
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a>
-<a name='L23'></a><a href='#L23'>23</a>
-<a name='L24'></a><a href='#L24'>24</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
+<a name='L20'></a><a href='#L20'>20</a></td><td class="line-coverage quiet"><span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const Country = <span class="cstat-no" title="statement not covered" >require('../models/Country');</span>
+<span class="cline-any cline-no">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">const { Model, DataTypes } = <span class="cstat-no" title="statement not covered" >require('sequelize');</span>
 &nbsp;
-class CountryController {
-<span class="fstat-no" title="function not covered" >	as</span>ync create(req, res) {
-		const country = <span class="cstat-no" title="statement not covered" >await Country.create(req.body);</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(country);</span>
+class City extends Model {
+<span class="fstat-no" title="function not covered" >	st</span>atic init(sequelize) {
+<span class="cstat-no" title="statement not covered" >		super.init({</span>
+			name: DataTypes.STRING,
+			areaCode: DataTypes.INTEGER
+		}, {
+			sequelize,
+			tableName: 'city'
+		});
 	}
 &nbsp;
-<span class="fstat-no" title="function not covered" >	as</span>ync getAll(req, res) {
-		const countries = <span class="cstat-no" title="statement not covered" >await Country.findAll({ order: [['name', 'ASC']] });</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(countries);</span>
-	}
-&nbsp;
-<span class="fstat-no" title="function not covered" >	as</span>ync findByName(req, res) {
-		const { name } = <span class="cstat-no" title="statement not covered" >req.params;</span>
-		const country = <span class="cstat-no" title="statement not covered" >await Country.findOne({ where: { name: name } });</span>
-&nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(country);</span>
+<span class="fstat-no" title="function not covered" >	st</span>atic associate(models) {
+<span class="cstat-no" title="statement not covered" >		this.belongsTo(models.State, { foreignKey: "stateId", as: "stateCity" });</span>
+<span class="cstat-no" title="statement not covered" >		this.hasMany(models.Address, { foreignKey: "cityId", as: "cityAddresses" });</span>
 	}
 }
 &nbsp;
-<span class="cstat-no" title="statement not covered" >module.exports = new CountryController();</span></pre></td></tr></table></pre>
+<span class="cstat-no" title="statement not covered" >module.exports = City;</span></pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

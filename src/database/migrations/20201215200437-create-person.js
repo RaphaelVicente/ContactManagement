@@ -2,7 +2,7 @@
 
 module.exports = {
 	up: async (queryInterface, Sequelize) => {
-		await queryInterface.createTable("country", {
+		await queryInterface.createTable("person", {
 			id: {
 				type: Sequelize.BIGINT,
 				primaryKey: true,
@@ -13,8 +13,12 @@ module.exports = {
 				type: Sequelize.STRING,
 				allowNull: false
 			},
-			country_code: {
-				type: Sequelize.INTEGER,
+			birth_date: {
+				type: Sequelize.DATEONLY,
+				allowNull: false
+			},
+			type: {
+				type: Sequelize.STRING,
 				allowNull: false
 			},
 			created_at: {
@@ -29,6 +33,6 @@ module.exports = {
 	},
 
 	down: async (queryInterface, Sequelize) => {
-		await queryInterface.dropTable("country");
+		await queryInterface.dropTable("person")
 	}
 };

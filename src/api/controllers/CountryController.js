@@ -1,4 +1,4 @@
-const Country = require('../models/Country');
+const Country = require("../models/Country");
 
 class CountryController {
 	async create(req, res) {
@@ -8,7 +8,7 @@ class CountryController {
 	}
 
 	async getAll(req, res) {
-		const countries = await Country.findAll({ order: [['name', 'ASC']] });
+		const countries = await Country.findAll({ order: [["name", "ASC"]] });
 
 		return res.json(countries);
 	}

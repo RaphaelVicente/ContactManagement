@@ -1,10 +1,27 @@
 const Sequelize = require("sequelize");
 const dbConfig = require("../../config/database");
 
+const Address = require("./Address");
+const City = require("./City");
 const Country = require("./Country");
+const Employee = require("./Employee");
+const Person = require("./Person");
+const State = require("./State");
 
-const connection = new Sequelize(dbConfig);
+const sequelize = new Sequelize(dbConfig);
 
-Country.init(connection);
+Address.init(sequelize);
+City.init(sequelize);
+Country.init(sequelize);
+Employee.init(sequelize);
+Person.init(sequelize);
+State.init(sequelize);
 
-module.exports = connection;
+Address.associate(sequelize.models);
+City.associate(sequelize.models);
+Country.associate(sequelize.models);
+Employee.associate(sequelize.models);
+Person.associate(sequelize.models);
+State.associate(sequelize.models);
+
+module.exports = sequelize;
