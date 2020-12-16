@@ -22,11 +22,11 @@ class Employee extends Model {
     }
 
     static associate(models) {
-        this.belongsTo(models.Physical, { foreignKey: "personId", as: "personEmployee"});
+        this.belongsTo(models.Person, { foreignKey: "personId", as: "personEmployee"});
     }
 
     checkPassword(password) {
-        return bcrypt.compare(password, this.password);
+        return bcrypt.compareSync(password, this.password);
     }
 }
 

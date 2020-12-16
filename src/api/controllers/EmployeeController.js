@@ -3,14 +3,27 @@ const Employee = require("../models/Employee");
 
 class EmployeeController {
 	async create(req, res) {
-		const employee = await Employee.findOne({ where: { username: req.body.username } });
+		if (req.body.personEmployee) {
+			const username = req.body.personEmployee.username;
+			const employee = await Employee.findOne({ where: { username: username } });
+
+			if (employee)
+				return res.status(500).json({ error: `Username ${username} already registered.` });
+
+			const newPersonEmployee = await Person.create(req.body, { include: { model: Employee, as: "personEmployee" } });
+
+			return res.json(newPersonEmployee);
+		}
+
+		const username = req.body.username;
+		const employee = await Employee.findOne({ where: { username: username } });
 
 		if (employee)
-			return res.status(500).json({ error: `Username ${req.body.username} already registered.` });
+			return res.status(500).json({ error: `Username ${username} already registered.` });
 
-		const newEmployee = await Employee.create(req.body);
+		const newPersonEmployee = await Employee.create(req.body);
 
-		return res.json(newEmployee);
+		return res.json(newPersonEmployee);
 	}
 
 	async getAll(req, res) {
@@ -23,6 +36,16 @@ class EmployeeController {
 		});
 
 		return res.json(people);
+	}
+
+	async getByUsername(req, res) {
+		const { username } = req.params;
+		const employee = await Employee.findOne({
+			where: { username: username },
+			include: { model: Person, as: "personEmployee" }
+		});
+
+		return res.json(employee);
 	}
 }
 

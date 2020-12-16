@@ -7,9 +7,14 @@ module.exports = {
         return res.json(contact);
     },
 
-    async getAll(req, res) {
-        const contacts = await Contact.findAll();
+    async getContactsFromPerson(req, res) {
+        const { personId } = req.params;
 
-        return res.json(contacts);
+		const person = await Person.findByPk(personId, {
+			include: { model: Contact, as: "personContacts" },
+			order: [[{ model: Contact, as: "personContacts" }, "number", "ASC"]]
+        });
+        
+        return res.json(person);
     }
 };

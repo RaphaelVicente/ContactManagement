@@ -27,6 +27,7 @@ routes.get("/country/:name", CountryController.findByName);
 
 routes.post("/employee", EmployeeController.create);
 routes.get("/employees", EmployeeController.getAll);
+routes.get("/employee/:username", EmployeeController.getByUsername);
 
 routes.post("/person", PersonController.create);
 routes.get("/people", PersonController.getAll);

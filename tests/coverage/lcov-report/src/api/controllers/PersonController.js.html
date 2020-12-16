@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/api/controllers/StateController.js</title>
+    <title>Code coverage report for src/api/controllers/PersonController.js</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/api/controllers</a> StateController.js</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/api/controllers</a> PersonController.js</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.08% </span>
+                <span class="strong">27.27% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/13</span>
+                <span class='fraction'>3/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>0/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>0/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.08% </span>
+                <span class="strong">27.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/13</span>
+                <span class='fraction'>3/11</span>
             </div>
         
             
@@ -85,14 +85,7 @@
 <a name='L26'></a><a href='#L26'>26</a>
 <a name='L27'></a><a href='#L27'>27</a>
 <a name='L28'></a><a href='#L28'>28</a>
-<a name='L29'></a><a href='#L29'>29</a>
-<a name='L30'></a><a href='#L30'>30</a>
-<a name='L31'></a><a href='#L31'>31</a>
-<a name='L32'></a><a href='#L32'>32</a>
-<a name='L33'></a><a href='#L33'>33</a>
-<a name='L34'></a><a href='#L34'>34</a>
-<a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L29'></a><a href='#L29'>29</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -110,59 +103,45 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">const State = require("../models/State");
-const Country = require("../models/Country");
+<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">const { Op } = require("sequelize");
+const Person = require("../models/Person");
 &nbsp;
-class StateController {
+class PersonController {
 <span class="fstat-no" title="function not covered" >	as</span>ync create(req, res) {
-		const state = <span class="cstat-no" title="statement not covered" >await State.create(req.body);</span>
+		const newPerson = <span class="cstat-no" title="statement not covered" >await Person.create(req.body);</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(state);</span>
+<span class="cstat-no" title="statement not covered" >		return res.json(newPerson);</span>
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	as</span>ync getAll(req, res) {
-		const states = <span class="cstat-no" title="statement not covered" >await State.findAll({ order: [["name", "ASC"]] });</span>
+		const people = <span class="cstat-no" title="statement not covered" >await Person.findAll();</span>
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(states);</span>
-	}
-&nbsp;
-<span class="fstat-no" title="function not covered" >	as</span>ync getStatesFromCountry(req, res) {
-		const { countryId } = <span class="cstat-no" title="statement not covered" >req.params;</span>
-&nbsp;
-		const country = <span class="cstat-no" title="statement not covered" >await Country.findByPk(countryId, {</span>
-			include: { model: State, as: "countryStates" },
-			order: [[{ model: State, as: "countryStates" }, "name", "ASC"]]
-		});
-&nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(country.countryStates);</span>
+<span class="cstat-no" title="statement not covered" >		return res.json(people);</span>
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	as</span>ync findByName(req, res) {
 		const { name } = <span class="cstat-no" title="statement not covered" >req.params;</span>
-		const state = <span class="cstat-no" title="statement not covered" >await State.findOne({ where: { name: name } });</span>
+		var condition = <span class="cstat-no" title="statement not covered" >name ? { name: { [Op.like]: `%${name}%` } } : null;</span>
+		const people = <span class="cstat-no" title="statement not covered" >await Person.findAll({</span>
+			where: condition,
+			order: [["name", "ASC"]]
+		});
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(state);</span>
+<span class="cstat-no" title="statement not covered" >		return res.json(people);</span>
 	}
 }
 &nbsp;
-module.exports = new StateController();</pre></td></tr></table></pre>
+module.exports = new PersonController();</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
             </div><!-- /wrapper -->

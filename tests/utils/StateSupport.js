@@ -2,6 +2,10 @@ const request = require("supertest");
 const api = require("../../src/api");
 
 class StateSupport {
+	async createState(country) {
+		return await request(api).post('/state').send({ name: "Paraná", abbreviation: "PR", countryId: country.id });
+	}
+	
 	async createFiveStates(country) {
 		let states = [];
 		let entries = [

@@ -1,5 +1,6 @@
 const Address = require("../models/Address");
 const City = require("../models/City");
+const Person = require("../models/Person");
 
 class AddressController {
 	async create(req, res) {

@@ -11,8 +11,8 @@ class PersonSupport {
     }
 
     async createFivePeople() {
-        var people = [];
-        var i = 1;
+        let people = [];
+        let i = 1;
 
         while (i <= 5) {
             people.push(
@@ -26,26 +26,6 @@ class PersonSupport {
         }
 
         return people;
-    }
-
-    async createThreeEmployee() {
-        const people = (await request(api).get("/people").send()).body;
-        var employees = [];
-        var i = 7;
-
-        while (i <= 9) {
-            employees.push(
-                await request(api).post("/employee").send({
-                    username: `username${i}`,
-                    password: `password${i}`,
-                    occupation: `occupation${i}`,
-                    personId: people[i-6].id
-                })
-            );
-            i++
-        }
-
-        return employees;
     }
 
     async findPeopleByName(name) {

@@ -5,26 +5,19 @@ const truncate = require("../utils/truncate");
 const CountrySupport = require("../utils/CountrySupport");
 const StateSupport = require("../utils/StateSupport");
 const CitySupport = require("../utils/CitySupport");
+const AddressSupport = require("../utils/AddressSupport");
 const PersonSupport = require("../utils/PersonSupport");
 
 beforeEach(async () => {
-	const res = await truncate();
-	const countries = await CountrySupport.createFiveCountries();
-	const states = await StateSupport.createFiveStates(countries[0].body);
-	const cities = await CitySupport.createFiveCities(states[0].body);
+	await truncate();
+	const country = await CountrySupport.createCountry();
+	const state = await StateSupport.createState(country.body);
+	const city = await CitySupport.createCity(state.body);
 	const person = await PersonSupport.createPerson();
-	await request(api).post("/address").send({
-		neighborhood: "Zona 7",
-		zipcode: "87030025",
-		street: "Mandaguari",
-		number: 2100,
-		complement: "Ap 207",
-		cityId: cities[0].id,
-		personId: person.id
-	});
+	await AddressSupport.createAddress(city.body, person.body);
 });
 
-it("Create address", async () => {
+test("Create address", async () => {
 	const city = (await CitySupport.findCityByName("Maringá")).body;
 	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
 	const response = await request(api).post("/address").send({
@@ -41,7 +34,7 @@ it("Create address", async () => {
 	expect(response.body.street).toBe("Horacio");
 });
 
-it("Return all addresses", async () => {
+test("Return all addresses", async () => {
 	const response = await request(api).get("/addresses").send();
 
 	expect(response.status).toBe(200);
@@ -49,22 +42,16 @@ it("Return all addresses", async () => {
 	expect(response.body[0].street).toBe("Mandaguari");
 });
 
-it("Return all addresses from city", async () => {
+test("Return all addresses from city", async () => {
 	const maringa = (await CitySupport.findCityByName("Maringá")).body;
 	const addressesMaringa = await request(api).get(`/city/${maringa.id}/addresses`).send();
-
-	const pinhais = (await CitySupport.findCityByName("Pinhais")).body;
-	const addressesPinhais = await request(api).get(`/city/${pinhais.id}/addresses`).send();
 
 	expect(addressesMaringa.status).toBe(200);
 	expect(addressesMaringa.body.length).toBe(1);
 	expect(addressesMaringa.body[0].street).toBe("Mandaguari");
-
-	expect(addressesPinhais.status).toBe(200);
-	expect(addressesPinhais.body.length).toBe(0);
 });
 
-it("Return all addresses from person", async () => {
+test("Return all addresses from person", async () => {
 	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
 	const response = await request(api).get(`/person/${person.id}/addresses`).send();
 

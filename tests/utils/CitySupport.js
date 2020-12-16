@@ -2,6 +2,10 @@ const request = require("supertest");
 const api = require("../../src/api");
 
 class CitySupport {
+	async createCity(state) {
+		return await request(api).post('/city').send({ name: "Maringá", areaCode: 44, stateId: state.id });
+	}
+	
 	async createFiveCities(state) {
 		let cities = [];
 		let entries = [
