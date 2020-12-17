@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.08% </span>
+                <span class="strong">61.54% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/13</span>
+                <span class='fraction'>8/13</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">23.08% </span>
+                <span class="strong">61.54% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/13</span>
+                <span class='fraction'>8/13</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,8 +92,14 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,32 +115,26 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">const City = require("../models/City");
+<span class="cline-any cline-yes">3x</span></td><td class="text"><pre class="prettyprint lang-js">const City = require("../models/City");
 const State = require("../models/State");
 &nbsp;
 class CityController {
-<span class="fstat-no" title="function not covered" >	as</span>ync create(req, res) {
-		const city = <span class="cstat-no" title="statement not covered" >await City.create(req.body);</span>
+	async create(req, res) {
+		const city = await City.create(req.body);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(city);</span>
+		return res.json(city);
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	as</span>ync getAll(req, res) {
@@ -154,11 +154,11 @@ class CityController {
 <span class="cstat-no" title="statement not covered" >		return res.json(state.stateCities);</span>
 	}
 &nbsp;
-<span class="fstat-no" title="function not covered" >	as</span>ync findByName(req, res) {
-		const { name } = <span class="cstat-no" title="statement not covered" >req.params;</span>
-		const city = <span class="cstat-no" title="statement not covered" >await City.findOne({ where: { name: name } });</span>
+	async findByName(req, res) {
+		const { name } = req.params;
+		const city = await City.findOne({ where: { name: name } });
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(city);</span>
+		return res.json(city);
 	}
 }
 &nbsp;
@@ -169,7 +169,7 @@ module.exports = new CityController();</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Dec 16 2020 19:35:06 GMT-0300 (GMT-03:00)
+                at Thu Dec 17 2020 18:17:03 GMT-0300 (GMT-03:00)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

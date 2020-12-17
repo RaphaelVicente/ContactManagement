@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>4/14</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>3/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">28.57% </span>
+                <span class="strong">78.57% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>4/14</span>
+                <span class='fraction'>11/14</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -97,8 +97,20 @@
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
 <a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">1x</span>
+<a name='L41'></a><a href='#L41'>41</a></td><td class="line-coverage quiet"><span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -109,49 +121,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span></td><td class="text"><pre class="prettyprint lang-js">const Address = require("../models/Address");
+<span class="cline-any cline-yes">3x</span></td><td class="text"><pre class="prettyprint lang-js">const Address = require("../models/Address");
 const City = require("../models/City");
 const Person = require("../models/Person");
 &nbsp;
 class AddressController {
-<span class="fstat-no" title="function not covered" >	as</span>ync create(req, res) {
-		const address = <span class="cstat-no" title="statement not covered" >await Address.create(req.body);</span>
+	async create(req, res) {
+		const address = await Address.create(req.body);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(address);</span>
+		return res.json(address);
 	}
 &nbsp;
-<span class="fstat-no" title="function not covered" >	as</span>ync getAll(req, res) {
-		const addresses = <span class="cstat-no" title="statement not covered" >await Address.findAll();</span>
+	async getAll(req, res) {
+		const addresses = await Address.findAll();
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(addresses);</span>
+		return res.json(addresses);
 	}
 &nbsp;
 <span class="fstat-no" title="function not covered" >	as</span>ync getAddressesFromPerson(req, res) {
@@ -165,15 +165,15 @@ class AddressController {
 <span class="cstat-no" title="statement not covered" >		return res.json(person.personAddresses);</span>
 	}
 &nbsp;
-<span class="fstat-no" title="function not covered" >	as</span>ync getAddressesFromCity(req, res) {
-		const { cityId } = <span class="cstat-no" title="statement not covered" >req.params;</span>
+	async getAddressesFromCity(req, res) {
+		const { cityId } = req.params;
 &nbsp;
-		const city = <span class="cstat-no" title="statement not covered" >await City.findByPk(cityId, {</span>
+		const city = await City.findByPk(cityId, {
 			include: { model: Address, as: "cityAddresses" },
 			order: [[{ model: Address, as: "cityAddresses" }, "street", "ASC"]]
 		});
 &nbsp;
-<span class="cstat-no" title="statement not covered" >		return res.json(city.cityAddresses);</span>
+		return res.json(city.cityAddresses);
 	}
 }
 &nbsp;
@@ -184,7 +184,7 @@ module.exports = new AddressController();</pre></td></tr></table></pre>
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Dec 16 2020 19:35:06 GMT-0300 (GMT-03:00)
+                at Thu Dec 17 2020 18:17:03 GMT-0300 (GMT-03:00)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

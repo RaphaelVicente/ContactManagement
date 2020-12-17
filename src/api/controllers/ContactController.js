@@ -1,11 +1,12 @@
 const Contact = require("../models/Contact");
+const Person = require("../models/Person");
 
-module.exports = {
+class ContactController {
     async create(req, res) {
         const contact = await Contact.create(req.body);
 
         return res.json(contact);
-    },
+    }
 
     async getContactsFromPerson(req, res) {
         const { personId } = req.params;
@@ -17,4 +18,6 @@ module.exports = {
         
         return res.json(person);
     }
-};
+}
+
+module.exports = new ContactController();
