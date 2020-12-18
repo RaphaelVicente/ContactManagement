@@ -8,6 +8,8 @@ const EmployeeController = require("./api/controllers/EmployeeController");
 const PersonController = require("./api/controllers/PersonController");
 const StateController = require("./api/controllers/StateController");
 
+const CountryValidator = require("./api/validators/CountryValidator");
+
 routes.post("/address", AddressController.create);
 routes.get("/addresses", AddressController.getAll);
 routes.get("/city/:cityId/addresses", AddressController.getAddressesFromCity);
@@ -21,7 +23,7 @@ routes.get("/state/:stateId/cities", CityController.getCitiesFromState);
 routes.post("/contact", ContactController.create);
 routes.get("/person/:personId/contacts", ContactController.getContactsFromPerson);
 
-routes.post("/country", CountryController.create);
+routes.post("/country", CountryValidator.validateCreationData, CountryController.create);
 routes.get("/countries", CountryController.getAll);
 routes.get("/country/:name", CountryController.findByName);
 

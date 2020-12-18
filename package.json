@@ -8,7 +8,8 @@
 		"start": "node src/server.js",
 		"pretest": "NODE_ENV=test sequelize-cli db:migrate",
 		"test": "NODE_ENV=test jest",
-		"posttest": "NODE_ENV=test sequelize-cli db:migrate:undo:all"
+		"posttest": "NODE_ENV=test sequelize-cli db:migrate:undo:all",
+		"synctables": "sequelize-cli db:migrate"
 	},
 	"author": "Raphael",
 	"license": "ISC",

@@ -1,10 +1,14 @@
 const Country = require("../models/Country");
+const errorHandler = require("../utils/errorHandler");
 
 class CountryController {
 	async create(req, res) {
-		const country = await Country.create(req.body);
-
-		return res.json(country);
+		try {
+			const country = await Country.create(req.body);
+			return res.json(country);
+		} catch (error) {
+			return errorHandler(error, req, res);
+		}
 	}
 
 	async getAll(req, res) {

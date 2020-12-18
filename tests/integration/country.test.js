@@ -35,3 +35,19 @@ test("Return a country by name", async () => {
 	expect(response.body.name).toBe("Inglaterra");
 	expect(response.body.countryCode).toBe(44);
 });
+
+test("It does not create country without country code", async () => {
+	const response = await request(api).post("/country").send({ name: "Suiça" });
+
+	expect(response.status).toBe(500);
+	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors[0]).toBe("Field 'Country Code' must be filled");
+});
+
+test("It does not create country without name", async () => {
+	const response = await request(api).post("/country").send({ countryCode: 41 });
+
+	expect(response.status).toBe(500);
+	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors[0]).toBe("Field 'Name' must be filled");
+});
