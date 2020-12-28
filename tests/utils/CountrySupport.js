@@ -9,11 +9,11 @@ class CountrySupport {
 	async createFiveCountries() {
 		let countries = [];
 		let entries = [
-			{ name: "Brasil", countryCode: 55 },
-			{ name: "Estados Unidos", countryCode: 1 },
-			{ name: "Inglaterra", countryCode: 44 },
-			{ name: "Irlanda", countryCode: 353 },
-			{ name: "Alemanha", countryCode: 49 }
+			{ name: "Brazil", countryCode: 55 },
+			{ name: "United States", countryCode: 1 },
+			{ name: "England", countryCode: 44 },
+			{ name: "Ireland", countryCode: 353 },
+			{ name: "Germany", countryCode: 49 }
 		];
 
 		for (let country of entries)

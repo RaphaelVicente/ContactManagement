@@ -9,6 +9,7 @@ const PersonController = require("./api/controllers/PersonController");
 const StateController = require("./api/controllers/StateController");
 
 const CountryValidator = require("./api/validators/CountryValidator");
+const StateValidator = require("./api/validators/StateValidator");
 
 routes.post("/address", AddressController.create);
 routes.get("/addresses", AddressController.getAll);
@@ -35,7 +36,7 @@ routes.post("/person", PersonController.create);
 routes.get("/people", PersonController.getAll);
 routes.get("/people/:name", PersonController.findByName);
 
-routes.post("/state", StateController.create);
+routes.post("/state", StateValidator.validateCreationData, StateController.create);
 routes.get("/states", StateController.getAll);
 routes.get("/state/:name", StateController.findByName);
 routes.get("/country/:countryId/states", StateController.getStatesFromCountry);

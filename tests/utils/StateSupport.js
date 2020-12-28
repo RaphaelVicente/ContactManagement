@@ -3,14 +3,14 @@ const api = require("../../src/api");
 
 class StateSupport {
 	async createState(country) {
-		return await request(api).post('/state').send({ name: "Paraná", abbreviation: "PR", countryId: country.id });
+		return await request(api).post('/state').send({ name: "Parana", abbreviation: "PR", countryId: country.id });
 	}
 	
 	async createFiveStates(country) {
 		let states = [];
 		let entries = [
-			{ name: "Paraná", abbreviation: "PR", countryId: country.id },
-			{ name: "São Paulo", abbreviation: "SP", countryId: country.id },
+			{ name: "Parana", abbreviation: "PR", countryId: country.id },
+			{ name: "Sao Paulo", abbreviation: "SP", countryId: country.id },
 			{ name: "Rio Grande do Sul", abbreviation: "RS", countryId: country.id },
 			{ name: "Santa Catarina", abbreviation: "SC", countryId: country.id },
 			{ name: "Minas Gerais", abbreviation: "MG", countryId: country.id }
