@@ -3,14 +3,14 @@ const api = require("../../src/api");
 
 class CitySupport {
 	async createCity(state) {
-		return await request(api).post('/city').send({ name: "Maringá", areaCode: 44, stateId: state.id });
+		return await request(api).post('/city').send({ name: "Maringa", areaCode: 44, stateId: state.id });
 	}
 	
 	async createFiveCities(state) {
 		let cities = [];
 		let entries = [
-			{ name: "Maringá", areaCode: 44, stateId: state.id },
-			{ name: "Paranaguá", areaCode: 41, stateId: state.id },
+			{ name: "Maringa", areaCode: 44, stateId: state.id },
+			{ name: "Paranagua", areaCode: 41, stateId: state.id },
 			{ name: "Toledo", areaCode: 45, stateId: state.id },
 			{ name: "Ponta Grossa", areaCode: 42, stateId: state.id },
 			{ name: "Pinhais", areaCode: 41, stateId: state.id }

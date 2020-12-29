@@ -4,7 +4,7 @@ class Address extends Model {
 	static init(sequelize) {
 		super.init({
 			neighborhood: DataTypes.STRING,
-			zipcode: DataTypes.STRING,
+			zipcode: DataTypes.INTEGER,
 			street: DataTypes.STRING,
 			number: DataTypes.INTEGER,
 			complement: DataTypes.STRING

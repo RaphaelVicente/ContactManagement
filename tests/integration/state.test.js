@@ -19,7 +19,7 @@ test("Create state", async () => {
     expect(response.body.name).toBe("Mato Grosso");
 });
 
-test("Return a country by name", async () => {
+test("Return a state by name", async () => {
 	const response = await request(api).get("/state/Parana").send();
 
 	expect(response.status).toBe(200);

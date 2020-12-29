@@ -28,7 +28,7 @@ module.exports = {
 				allowNull: false
 			},
 			zipcode: {
-				type: Sequelize.STRING,
+				type: Sequelize.INTEGER,
 				allowNull: false
 			},
 			street: {
@@ -36,7 +36,8 @@ module.exports = {
 				allowNull: false
 			},
 			number: {
-				type: Sequelize.INTEGER
+				type: Sequelize.INTEGER,
+				allowNull: false
 			},
 			complement: {
 				type: Sequelize.STRING
