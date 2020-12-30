@@ -33,7 +33,7 @@ test("Return all cities", async () => {
 	const response = await request(api).get("/cities").send();
 
 	expect(response.status).toBe(200);
-	expect(response.body.length).toBe(5);
+	expect(response.body).toHaveLength(5);
 	expect(response.body[0].name).toBe("Maringa");
 	expect(response.body[1].name).toBe("Paranagua");
 	expect(response.body[2].name).toBe("Pinhais");
@@ -49,7 +49,7 @@ test("Return all cities from state", async () => {
 	const citiesSaoPaulo = await request(api).get(`/state/${saoPaulo.id}/cities`).send();
 
 	expect(citiesParana.status).toBe(200);
-	expect(citiesParana.body.length).toBe(5);
+	expect(citiesParana.body).toHaveLength(5);
 	expect(citiesParana.body[0].name).toBe("Maringa");
 	expect(citiesParana.body[1].name).toBe("Paranagua");
 	expect(citiesParana.body[2].name).toBe("Pinhais");
@@ -57,7 +57,7 @@ test("Return all cities from state", async () => {
 	expect(citiesParana.body[4].name).toBe("Toledo");
 
 	expect(citiesSaoPaulo.status).toBe(200);
-	expect(citiesSaoPaulo.body.length).toBe(0);
+	expect(citiesSaoPaulo.body).toHaveLength(0);
 });
 
 test("It does not create city without name", async () => {
@@ -65,7 +65,7 @@ test("It does not create city without name", async () => {
 	const response = await request(api).post("/city").send({ areaCode: 14, stateId: state.id });
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Name' must be filled");
 });
 
@@ -74,7 +74,7 @@ test("It does not create city with invalid name", async () => {
 	const response = await request(api).post("/city").send({ name: "Tupa1", areaCode: 14, stateId: state.id });
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Invalid 'Name'");
 });
 
@@ -83,7 +83,7 @@ test("It does not create city without area code", async () => {
 	const response = await request(api).post("/city").send({ name: "Tupa", stateId: state.id });
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Area Code' must be filled");
 });
 
@@ -92,7 +92,7 @@ test("It does not create city with invalid area code", async () => {
 	const response = await request(api).post("/city").send({ name: "Tupa", areaCode: "14a", stateId: state.id });
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("'Area Code' must contain only numbers");
 });
 
@@ -100,6 +100,6 @@ test("It does not create city without state", async () => {
 	const response = await request(api).post("/city").send({ name: "Tupa", areaCode: 14 });
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'State Id' must be filled");
 });

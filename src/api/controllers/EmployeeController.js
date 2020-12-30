@@ -8,7 +8,7 @@ class EmployeeController {
 			const employee = await Employee.findOne({ where: { username: username } });
 
 			if (employee)
-				return res.status(500).json({ error: `Username ${username} already registered.` });
+				return res.status(500).json({ errors: [`Username ${username} already registered.`] });
 
 			const newPersonEmployee = await Person.create(req.body, { include: { model: Employee, as: "personEmployee" } });
 
@@ -19,7 +19,7 @@ class EmployeeController {
 		const employee = await Employee.findOne({ where: { username: username } });
 
 		if (employee)
-			return res.status(500).json({ error: `Username ${username} already registered.` });
+			return res.status(500).json({ errors: [`Username ${username} already registered.`] });
 
 		const newPersonEmployee = await Employee.create(req.body);
 

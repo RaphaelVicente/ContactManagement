@@ -9,7 +9,7 @@ class PersonController {
 	}
 
 	async getAll(req, res) {
-		const people = await Person.findAll();
+		const people = await Person.findAll({ order: [["name", "ASC"]] });
 
 		return res.json(people);
 	}

@@ -19,7 +19,7 @@ beforeEach(async () => {
 
 test("Create address", async () => {
 	const city = (await CitySupport.findCityByName("Maringa")).body;
-	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
+	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
 	const response = await request(api).post("/address").send({
 		neighborhood: "Centro",
 		zipcode: "87030025",
@@ -38,7 +38,7 @@ test("Return all addresses", async () => {
 	const response = await request(api).get("/addresses").send();
 
 	expect(response.status).toBe(200);
-	expect(response.body.length).toBe(1);
+	expect(response.body).toHaveLength(1);
 	expect(response.body[0].street).toBe("Mandaguari");
 });
 
@@ -47,21 +47,22 @@ test("Return all addresses from city", async () => {
 	const addressesMaringa = await request(api).get(`/city/${maringa.id}/addresses`).send();
 
 	expect(addressesMaringa.status).toBe(200);
-	expect(addressesMaringa.body.length).toBe(1);
+	expect(addressesMaringa.body).toHaveLength(1);
 	expect(addressesMaringa.body[0].street).toBe("Mandaguari");
 });
 
 test("Return all addresses from person", async () => {
-	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
+	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
 	const response = await request(api).get(`/person/${person.id}/addresses`).send();
 
 	expect(response.status).toBe(200);
+	expect(response.body).toHaveLength(1);
 	expect(response.body[0].street).toBe("Mandaguari");
 });
 
 test("It does not create address without neighborhood", async () => {
 	const city = (await CitySupport.findCityByName("Maringa")).body;
-	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
+	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
 	const response = await request(api).post("/address").send({
 		zipcode: "87030025",
 		street: "Horacio",
@@ -72,13 +73,13 @@ test("It does not create address without neighborhood", async () => {
 	});
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Neighborhood' must be filled");
 });
 
 test("It does not create address without zipcode", async () => {
 	const city = (await CitySupport.findCityByName("Maringa")).body;
-	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
+	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
 	const response = await request(api).post("/address").send({
 		neighborhood: "Centro",
 		street: "Horacio",
@@ -89,13 +90,13 @@ test("It does not create address without zipcode", async () => {
 	});
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Zipcode' must be filled");
 });
 
 test("It does not create address without number", async () => {
 	const city = (await CitySupport.findCityByName("Maringa")).body;
-	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
+	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
 	const response = await request(api).post("/address").send({
 		neighborhood: "Centro",
 		zipcode: "87030025",
@@ -106,13 +107,13 @@ test("It does not create address without number", async () => {
 	});
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Number' must be filled");
 });
 
 test("It does not create address with invalid number", async () => {
 	const city = (await CitySupport.findCityByName("Maringa")).body;
-	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
+	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
 	const response = await request(api).post("/address").send({
 		neighborhood: "Centro",
 		zipcode: "87030025",
@@ -124,13 +125,13 @@ test("It does not create address with invalid number", async () => {
 	});
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("'Number' must contain only numbers");
 });
 
 test("It does not create address without street", async () => {
 	const city = (await CitySupport.findCityByName("Maringa")).body;
-	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
+	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
 	const response = await request(api).post("/address").send({
 		neighborhood: "Centro",
 		zipcode: "87030025",
@@ -141,12 +142,12 @@ test("It does not create address without street", async () => {
 	});
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Street' must be filled");
 });
 
 test("It does not create address without city", async () => {
-	const person = (await PersonSupport.findPeopleByName("Test1")).body[0];
+	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
 	const response = await request(api).post("/address").send({
 		neighborhood: "Centro",
 		zipcode: "87030025",
@@ -157,7 +158,7 @@ test("It does not create address without city", async () => {
 	});
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'City Id' must be filled");
 });
 
@@ -173,6 +174,6 @@ test("It does not create address without person", async () => {
 	});
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors.length).toBe(1);
+	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Person Id' must be filled");
 });

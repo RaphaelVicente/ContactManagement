@@ -4,26 +4,23 @@ const api = require("../../src/api");
 class PersonSupport {
     async createPerson() {
         return await request(api).post("/person").send({
-            name: "Test1",
-            birthDate: "1989-05-01",
+            name: "Luke",
+            birthDate: "1977-11-18",
             type: "Individual"
         });
     }
 
     async createFivePeople() {
         let people = [];
-        let i = 1;
-
-        while (i <= 5) {
-            people.push(
-                await request(api).post("/person").send({
-                    name: `Test${i}`,
-                    birthDate: `1989-0${i}-0${i}`,
-                    type: "Individual"
-                })
-            );
-            i++
-        }
+        let entries = [
+			{ name: "Smith", birthDate: "1989-02-10", type: "Individual" },
+			{ name: "John", birthDate: "1992-07-21", type: "Individual" },
+			{ name: "Lara", birthDate: "1990-05-09", type: "Individual" },
+			{ name: "Michael", birthDate: "1998-01-25", type: "Individual" },
+			{ name: "Luke", birthDate: "1977-11-18", type: "Individual" }
+        ];
+        
+        entries.forEach(async person => people.push(await request(api).post("/person").send(person)));
 
         return people;
     }

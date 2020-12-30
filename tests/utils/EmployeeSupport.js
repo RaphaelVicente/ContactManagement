@@ -5,19 +5,13 @@ class EmployeeSupport {
     async createThreeEmployee() {
         const people = (await request(api).get("/people").send()).body;
         let employees = [];
-        let i = 1;
+        let entries = [
+			{ username: "UsernameJohn", password: "passwordjohn", occupation: "salesman", personId: people[0].id },
+			{ username: "UsernameLara", password: "passwordlara", occupation: "manager", personId: people[1].id },
+			{ username: "UsernameLuke", password: "passwordluke", occupation: "salesman", personId: people[2].id }
+        ];
 
-        while (i <= 3) {
-            employees.push(
-                await request(api).post("/employee").send({
-                    username: `username${i}`,
-                    password: `password${i}`,
-                    occupation: `occupation${i}`,
-                    personId: people[i].id
-                })
-            );
-            i++
-        }
+        entries.forEach(async employee => employees.push(await request(api).post("/employee").send(employee)));
 
         return employees;
     }

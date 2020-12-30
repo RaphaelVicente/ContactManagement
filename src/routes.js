@@ -11,6 +11,8 @@ const StateController = require("./api/controllers/StateController");
 const AddressValidator = require("./api/validators/AddressValidator");
 const CityValidator = require("./api/validators/CityValidator");
 const CountryValidator = require("./api/validators/CountryValidator");
+const EmployeeValidator = require("./api/validators/EmployeeValidator");
+const PersonValidator = require("./api/validators/PersonValidator");
 const StateValidator = require("./api/validators/StateValidator");
 
 routes.post("/address", AddressValidator.validateCreationData, AddressController.create);
@@ -30,11 +32,11 @@ routes.post("/country", CountryValidator.validateCreationData, CountryController
 routes.get("/countries", CountryController.getAll);
 routes.get("/country/:name", CountryController.findByName);
 
-routes.post("/employee", EmployeeController.create);
+routes.post("/employee", EmployeeValidator.validateCreationData, EmployeeController.create);
 routes.get("/employees", EmployeeController.getAll);
 routes.get("/employee/:username", EmployeeController.getByUsername);
 
-routes.post("/person", PersonController.create);
+routes.post("/person", PersonValidator.validateCreationData, PersonController.create);
 routes.get("/people", PersonController.getAll);
 routes.get("/people/:name", PersonController.findByName);
 

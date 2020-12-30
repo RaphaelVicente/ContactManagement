@@ -35,10 +35,9 @@ test("Return all contacts from person", async () => {
     await ContactSupport.createContact(person);
     const response = await request(api).get(`/person/${person.id}/contacts`).send();
 
-    console.log(response.body);
     expect(response.status).toBe(200);
     expect(response.body.name).toBe("Test1")
-    expect(response.body.personContacts.length).toBe(1);
+    expect(response.body.personContacts).toHaveLength(1);
     expect(response.body.personContacts[0].contactType).toBe("Work");
     expect(response.body.personContacts[0].countryCode).toBe(55);
     expect(response.body.personContacts[0].areaCode).toBe(44);
