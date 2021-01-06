@@ -1,5 +1,4 @@
 const Country = require("../models/Country");
-const errorHandler = require("../utils/errorHandler");
 
 class CountryController {
 	async create(req, res) {
@@ -7,21 +6,27 @@ class CountryController {
 			const country = await Country.create(req.body);
 			return res.json(country);
 		} catch (error) {
-			return errorHandler(error, req, res);
+			return res.status(500).json({ errors: [error] });
 		}
 	}
 
 	async getAll(req, res) {
-		const countries = await Country.findAll({ order: [["name", "ASC"]] });
-
-		return res.json(countries);
+		try {
+			const countries = await Country.findAll({ order: [["name", "ASC"]] });
+			return res.json(countries);
+		} catch (error) {
+			return res.status(500).json({ errors: [error] });
+		}
 	}
 
-	async findByName(req, res) {
+	async getByName(req, res) {
 		const { name } = req.params;
-		const country = await Country.findOne({ where: { name: name } });
-
-		return res.json(country);
+		try {
+			const country = await Country.findOne({ where: { name: name } });
+			return res.json(country);
+		} catch (error) {
+			return res.status(500).json({ errors: [error] });
+		}
 	}
 }
 

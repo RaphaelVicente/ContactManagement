@@ -83,8 +83,9 @@ test("It does not create city without area code", async () => {
 	const response = await request(api).post("/city").send({ name: "Tupa", stateId: state.id });
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors).toHaveLength(1);
+	expect(response.body.errors).toHaveLength(2);
 	expect(response.body.errors[0]).toBe("Field 'Area Code' must be filled");
+	expect(response.body.errors[1]).toBe("'Area Code' must contain only numbers");
 });
 
 test("It does not create city with invalid area code", async () => {
@@ -102,4 +103,15 @@ test("It does not create city without state", async () => {
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'State Id' must be filled");
+});
+
+test("It does not create city without any information", async () => {
+	const response = await request(api).post("/city").send({});
+
+	expect(response.status).toBe(500);
+	expect(response.body.errors).toHaveLength(4);
+	expect(response.body.errors[0]).toBe("Field 'Name' must be filled");
+	expect(response.body.errors[1]).toBe("Field 'Area Code' must be filled");
+	expect(response.body.errors[2]).toBe("'Area Code' must contain only numbers");
+	expect(response.body.errors[3]).toBe("Field 'State Id' must be filled");
 });

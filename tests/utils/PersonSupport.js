@@ -13,11 +13,11 @@ class PersonSupport {
     async createFivePeople() {
         let people = [];
         let entries = [
+            { name: "John", birthDate: "1992-07-21", type: "Individual" },
+            { name: "Lara", birthDate: "1990-05-09", type: "Individual" },
+            { name: "Luke", birthDate: "1977-11-18", type: "Individual" },
 			{ name: "Smith", birthDate: "1989-02-10", type: "Individual" },
-			{ name: "John", birthDate: "1992-07-21", type: "Individual" },
-			{ name: "Lara", birthDate: "1990-05-09", type: "Individual" },
-			{ name: "Michael", birthDate: "1998-01-25", type: "Individual" },
-			{ name: "Luke", birthDate: "1977-11-18", type: "Individual" }
+			{ name: "Michael", birthDate: "1998-01-25", type: "Individual" }
         ];
         
         entries.forEach(async person => people.push(await request(api).post("/person").send(person)));

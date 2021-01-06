@@ -1,27 +1,29 @@
-const errorHandler = require("../utils/errorHandler");
-
 class PersonValidator {
     validateCreationData(req, res, next) {
         const person = req.body;
+        let errors = [];
 
         if (!person.name)
-            return errorHandler("Field 'Name' must be filled", req, res);
+            errors.push("Field 'Name' must be filled");
 
         const regexValidator = /^[A-Za-z\s]+$/;
 
         if (!regexValidator.test(person.name))
-            return errorHandler("Invalid 'Name'", req, res);
+            errors.push("Invalid 'Name'");
 
         if (!person.birthDate)
-            return errorHandler("Field 'Birth Date' must be filled", req, res);
+            errors.push("Field 'Birth Date' must be filled");
 
         const patternBirthDate = /^(([0-9]{4})-(0[469]|11)-(0[1-9]|[12][0-9]|30))|^(([0-9]{4})-(0[13578]|10|12)-(0[1-9]|[12][0-9]|3[01]))|^(([0-9]{4})-02-(0[1-9]|[12][0-9]))/;
-        
+
         if (!patternBirthDate.test(person.birthDate))
-            return errorHandler("Invalid 'Birth Date'", req, res);
+            errors.push("Invalid 'Birth Date'");
 
         if (!person.type)
-            return errorHandler("Field 'Type' must be filled", req, res);
+            errors.push("Field 'Type' must be filled");
+
+        if (errors.length > 0)
+            return res.status(500).json({ errors: errors });
 
         next();
     }

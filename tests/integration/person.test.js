@@ -74,8 +74,9 @@ test("It does not create person without birth date", async () => {
 	});
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors).toHaveLength(1);
+	expect(response.body.errors).toHaveLength(2);
 	expect(response.body.errors[0]).toBe("Field 'Birth Date' must be filled");
+	expect(response.body.errors[1]).toBe("Invalid 'Birth Date'");
 });
 
 test("It does not create person with invalid birth date", async () => {
@@ -107,4 +108,15 @@ test("It does not find people without name", async () => {
 
 	expect(response.status).toBe(200);
 	expect(response.body).toHaveLength(0);
+});
+
+test("It does not create person without any information", async () => {
+	const response = await request(api).post("/person").send({});
+
+	expect(response.status).toBe(500);
+	expect(response.body.errors).toHaveLength(4);
+	expect(response.body.errors[0]).toBe("Field 'Name' must be filled");
+	expect(response.body.errors[1]).toBe("Field 'Birth Date' must be filled");
+	expect(response.body.errors[2]).toBe("Invalid 'Birth Date'");
+	expect(response.body.errors[3]).toBe("Field 'Type' must be filled");
 });

@@ -22,7 +22,7 @@ routes.get("/person/:personId/addresses", AddressController.getAddressesFromPers
 
 routes.post("/city", CityValidator.validateCreationData, CityController.create);
 routes.get("/cities", CityController.getAll);
-routes.get("/city/:name", CityController.findByName);
+routes.get("/city/:name", CityController.getByName);
 routes.get("/state/:stateId/cities", CityController.getCitiesFromState);
 
 routes.post("/contact", ContactController.create);
@@ -30,7 +30,7 @@ routes.get("/person/:personId/contacts", ContactController.getContactsFromPerson
 
 routes.post("/country", CountryValidator.validateCreationData, CountryController.create);
 routes.get("/countries", CountryController.getAll);
-routes.get("/country/:name", CountryController.findByName);
+routes.get("/country/:name", CountryController.getByName);
 
 routes.post("/employee", EmployeeValidator.validateCreationData, EmployeeController.create);
 routes.get("/employees", EmployeeController.getAll);
@@ -38,11 +38,11 @@ routes.get("/employee/:username", EmployeeController.getByUsername);
 
 routes.post("/person", PersonValidator.validateCreationData, PersonController.create);
 routes.get("/people", PersonController.getAll);
-routes.get("/people/:name", PersonController.findByName);
+routes.get("/people/:name", PersonController.getByName);
 
 routes.post("/state", StateValidator.validateCreationData, StateController.create);
 routes.get("/states", StateController.getAll);
-routes.get("/state/:name", StateController.findByName);
+routes.get("/state/:name", StateController.getByName);
 routes.get("/country/:countryId/states", StateController.getStatesFromCountry);
 
 module.exports = routes;

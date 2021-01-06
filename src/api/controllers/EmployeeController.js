@@ -5,47 +5,66 @@ class EmployeeController {
 	async create(req, res) {
 		if (req.body.personEmployee) {
 			const username = req.body.personEmployee.username;
+
+			try {
+				const employee = await Employee.findOne({ where: { username: username } });
+
+				if (employee)
+					return res.status(500).json({ errors: [`Username ${username} already registered.`] });
+
+				const newPersonEmployee = await Person.create(req.body, { include: { model: Employee, as: "personEmployee" } });
+
+				return res.json(newPersonEmployee);
+			} catch (error) {
+				return res.status(500).json({ errors: [error] });
+			}
+		}
+
+		const username = req.body.username;
+
+		try {
 			const employee = await Employee.findOne({ where: { username: username } });
 
 			if (employee)
 				return res.status(500).json({ errors: [`Username ${username} already registered.`] });
 
-			const newPersonEmployee = await Person.create(req.body, { include: { model: Employee, as: "personEmployee" } });
+			const newPersonEmployee = await Employee.create(req.body);
 
 			return res.json(newPersonEmployee);
+		} catch (error) {
+			return res.status(500).json({ errors: [error] });
 		}
-
-		const username = req.body.username;
-		const employee = await Employee.findOne({ where: { username: username } });
-
-		if (employee)
-			return res.status(500).json({ errors: [`Username ${username} already registered.`] });
-
-		const newPersonEmployee = await Employee.create(req.body);
-
-		return res.json(newPersonEmployee);
 	}
 
 	async getAll(req, res) {
-		const people = await Person.findAll({
-			include: {
-				model: Employee, as: "personEmployee",
-				required: true
-			},
-			order: [["name", "ASC"]]
-		});
+		try {
+			const people = await Person.findAll({
+				include: {
+					model: Employee, as: "personEmployee",
+					required: true
+				},
+				order: [["name", "ASC"]]
+			});
 
-		return res.json(people);
+			return res.json(people);
+		} catch (error) {
+			return res.status(500).json({ errors: [error] });
+		}
 	}
 
 	async getByUsername(req, res) {
 		const { username } = req.params;
-		const employee = await Employee.findOne({
-			where: { username: username },
-			include: { model: Person, as: "personEmployee" }
-		});
 
-		return res.json(employee);
+		try {
+			const employee = await Employee.findOne({
+				where: { username: username },
+				include: { model: Person, as: "personEmployee" }
+			});
+
+			return res.json(employee);
+		} catch (error) {
+			return res.status(500).json({ errors: [error] });
+		}
 	}
 }
 

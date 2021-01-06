@@ -1,25 +1,27 @@
-const errorHandler = require("../utils/errorHandler");
-
 class StateValidator {
 	validateCreationData(req, res, next) {
 		const state = req.body;
+		let errors = [];
 
 		if (!state.name)
-			return errorHandler("Field 'Name' must be filled", req, res);
+			errors.push("Field 'Name' must be filled");
 
-		let regexValidator = /^[A-Za-z\s]+$/;
+		const regexValidator = /^[A-Za-z\s]+$/;
 
 		if (!regexValidator.test(state.name))
-			return errorHandler("Invalid 'Name'", req, res);
+			errors.push("Invalid 'Name'");
 
 		if (!state.abbreviation)
-			return errorHandler("Field 'Abbreviation' must be filled", req, res);
+			errors.push("Field 'Abbreviation' must be filled");
 
 		if (!regexValidator.test(state.abbreviation))
-			return errorHandler("Invalid 'Abbreviation'", req, res);
+			errors.push("Invalid 'Abbreviation'");
 
 		if (!state.countryId)
-			return errorHandler("Field 'Country Id' must be filled", req, res);
+			errors.push("Field 'Country Id' must be filled");
+
+		if (errors.length > 0)
+			return res.status(500).json({errors: errors});
 
 		next();
 	}

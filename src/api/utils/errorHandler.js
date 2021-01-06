@@ -1,21 +1,19 @@
-module.exports = (error, req, res, next, status = 500) => {
-	if (!res || !res.locals) {
-		throw error;
-	}
-
-	const bundle = res.locals.bundle || { errors: [] };
-	let data = error ? [error] : [];
+module.exports = (err, req, res, next) => {
+	const bundle = res || { errors: [] };
+	const data = err ? [err] : [];
 	let errors = [];
 
-	if (error.constraint) {
-		errors = errors.concat(`Constraint violation: ${error.constraint}`);
-		return res.status(status).json({ errors });
+	if (err.constraint) {
+		errors = errors.concat(`Constraint violation: ${err.constraint}`);
+		return res.status(500).json({ errors });
 	}
 
 	if (bundle.errors || data) {
-		errors = errors.concat(getMessages(bundle.errors));
+		console.log("aaaaaaaaaa");
+		// errors = errors.concat(getMessages(bundle.errors));
 		errors = errors.concat(data);
-		res.status(status).json({ errors });
+		// res.status(500).send({ errors: errors });
+		res.status(500).json({ errors: ["aaaaaaaaa"] });
 	}
 	else
 		next();

@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const errorHandler = require("./api/utils/errorHandler");
 require("./api/models")
 
 require("dotenv").config({
@@ -22,7 +21,6 @@ class ApiController {
 		};
 
 		this.express.use(cors(corsOptions));
-		this.express.use(errorHandler);
 		this.express.use(bodyParser.json());
 		this.express.use(bodyParser.urlencoded({ extended: true }));
 	}

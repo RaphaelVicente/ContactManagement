@@ -40,14 +40,14 @@ test("It does not create country without code", async () => {
 	const response = await request(api).post("/country").send({ name: "Switzerland" });
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors).toHaveLength(1);
+	expect(response.body.errors).toHaveLength(2);
 	expect(response.body.errors[0]).toBe("Field 'Country Code' must be filled");
+	expect(response.body.errors[1]).toBe("'Country Code' must contain only numbers");
 });
 
 test("It does not create country with invalid code", async () => {
 	const response = await request(api).post("/country").send({ name: "England", countryCode: "4a" });
 
-	console.log(response.body);
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("'Country Code' must contain only numbers");
@@ -67,4 +67,14 @@ test("It does not create country with invalid name", async () => {
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Invalid 'Name'");
+});
+
+test("It does not create country without any information", async () => {
+	const response = await request(api).post("/country").send({});
+
+	expect(response.status).toBe(500);
+	expect(response.body.errors).toHaveLength(3);
+	expect(response.body.errors[0]).toBe("Field 'Name' must be filled");
+	expect(response.body.errors[1]).toBe("Field 'Country Code' must be filled");
+	expect(response.body.errors[2]).toBe("'Country Code' must contain only numbers");
 });

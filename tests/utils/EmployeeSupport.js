@@ -2,8 +2,9 @@ const request = require("supertest");
 const api = require("../../src/api");
 
 class EmployeeSupport {
-    async createThreeEmployee() {
-        const people = (await request(api).get("/people").send()).body;
+    async createThreeEmployees() {
+        const response = await request(api).get("/people").send();
+        const people = response.body;
         let employees = [];
         let entries = [
 			{ username: "UsernameJohn", password: "passwordjohn", occupation: "salesman", personId: people[0].id },

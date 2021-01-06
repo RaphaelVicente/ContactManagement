@@ -3,33 +3,47 @@ const State = require("../models/State");
 
 class CityController {
 	async create(req, res) {
-		const city = await City.create(req.body);
-
-		return res.json(city);
+		try {
+			const city = await City.create(req.body);
+			return res.json(city);
+		} catch (error) {
+			return res.status(500).json({ errors: errors });
+		}
 	}
 
 	async getAll(req, res) {
-		const cities = await City.findAll({ order: [["name", "ASC"]] });
-
-		return res.json(cities);
+		try {
+			const cities = await City.findAll({ order: [["name", "ASC"]] });
+			return res.json(cities);
+		} catch (error) {
+			return res.status(500).json({ errors: errors });
+		}
 	}
 
 	async getCitiesFromState(req, res) {
 		const { stateId } = req.params;
 
-		const state = await State.findByPk(stateId, {
-			include: { model: City, as: "stateCities" },
-			order: [[{ model: City, as: "stateCities" }, "name", "ASC"]]
-		});
+		try {
+			const state = await State.findByPk(stateId, {
+				include: { model: City, as: "stateCities" },
+				order: [[{ model: City, as: "stateCities" }, "name", "ASC"]]
+			});
 
-		return res.json(state.stateCities);
+			return res.json(state.stateCities);
+		} catch (error) {
+			return res.status(500).json({ errors: errors });
+		}
 	}
 
-	async findByName(req, res) {
+	async getByName(req, res) {
 		const { name } = req.params;
-		const city = await City.findOne({ where: { name: name } });
 
-		return res.json(city);
+		try {
+			const city = await City.findOne({ where: { name: name } });
+			return res.json(city);
+		} catch (error) {
+			return res.status(500).json({ errors: errors });
+		}
 	}
 }
 

@@ -7,8 +7,8 @@ const EmployeeSupport = require("../utils/EmployeeSupport");
 
 beforeEach(async () => {
 	await truncate();
-    await PersonSupport.createFivePeople();
-    await EmployeeSupport.createThreeEmployee();
+	await PersonSupport.createFivePeople();
+    await EmployeeSupport.createThreeEmployees();
 });
 
 test("Create employee", async () => {
@@ -95,7 +95,7 @@ test("It does not create employee without username", async () => {
 	});
 
 	expect(Employee.status).toBe(500);
-	expect(Employee.body).toHaveLength(1);
+	expect(Employee.body.errors).toHaveLength(1);
 	expect(Employee.body.errors[0]).toBe("Field 'Username' must be filled");
 });
 
@@ -108,7 +108,7 @@ test("It does not create employee without password", async () => {
 	});
 
 	expect(Employee.status).toBe(500);
-	expect(Employee.body).toHaveLength(1);
+	expect(Employee.body.errors).toHaveLength(1);
 	expect(Employee.body.errors[0]).toBe("Field 'Password' must be filled");
 });
 
@@ -121,6 +121,18 @@ test("It does not create employee without occupation", async () => {
 	});
 
 	expect(Employee.status).toBe(500);
-	expect(Employee.body).toHaveLength(1);
+	expect(Employee.body.errors).toHaveLength(1);
 	expect(Employee.body.errors[0]).toBe("Field 'Occupation' must be filled");
+});
+
+test("It does not create employee without any information", async () => {
+	const person = (await PersonSupport.findPeopleByName("Smith")).body[0];
+	const Employee = await request(api).post("/employee").send({});
+
+	expect(Employee.status).toBe(500);
+	expect(Employee.body.errors).toHaveLength(4);
+	expect(Employee.body.errors[0]).toBe("Field 'Username' must be filled");
+	expect(Employee.body.errors[1]).toBe("Field 'Password' must be filled");
+	expect(Employee.body.errors[2]).toBe("Field 'Occupation' must be filled");
+	expect(Employee.body.errors[3]).toBe("Field 'Person Id' must be filled");
 });

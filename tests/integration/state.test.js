@@ -101,3 +101,13 @@ test("It does not create state without country", async () => {
 	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Country Id' must be filled");
 });
+
+test("It does not create state without any information", async () => {
+	const response = await request(api).post("/state").send({})
+
+	expect(response.status).toBe(500);
+	expect(response.body.errors).toHaveLength(3);
+	expect(response.body.errors[0]).toBe("Field 'Name' must be filled");
+	expect(response.body.errors[1]).toBe("Field 'Abbreviation' must be filled");
+	expect(response.body.errors[2]).toBe("Field 'Country Id' must be filled");
+});
