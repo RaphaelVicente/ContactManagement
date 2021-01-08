@@ -107,8 +107,9 @@ test("It does not create address without number", async () => {
 	});
 
 	expect(response.status).toBe(500);
-	expect(response.body.errors).toHaveLength(1);
+	expect(response.body.errors).toHaveLength(2);
 	expect(response.body.errors[0]).toBe("Field 'Number' must be filled");
+	expect(response.body.errors[1]).toBe("'Number' must contain only numbers");
 });
 
 test("It does not create address with invalid number", async () => {
@@ -176,4 +177,19 @@ test("It does not create address without person", async () => {
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Person Id' must be filled");
+});
+
+test("It does not create address without information", async () => {
+	const city = (await CitySupport.findCityByName("Maringa")).body;
+	const response = await request(api).post("/address").send({});
+
+	expect(response.status).toBe(500);
+	expect(response.body.errors).toHaveLength(7);
+	expect(response.body.errors[0]).toBe("Field 'Neighborhood' must be filled");
+	expect(response.body.errors[1]).toBe("Field 'Zipcode' must be filled");
+	expect(response.body.errors[2]).toBe("Field 'Street' must be filled");
+	expect(response.body.errors[3]).toBe("Field 'Number' must be filled");
+	expect(response.body.errors[4]).toBe("'Number' must contain only numbers");
+	expect(response.body.errors[5]).toBe("Field 'City Id' must be filled");
+	expect(response.body.errors[6]).toBe("Field 'Person Id' must be filled");
 });

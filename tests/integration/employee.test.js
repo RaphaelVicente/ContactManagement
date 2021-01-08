@@ -40,36 +40,9 @@ test("Create person and employee", async () => {
 	expect(personEmployee.body.personEmployee.username).toBe("UsernameJane");
 });
 
-test("It does not create employee with username already regitered", async () => {
-    const person = (await PersonSupport.findPeopleByName("Smith")).body[0];
-	const employee = await request(api).post("/employee").send({
-		username: "UsernameLuke",
-		password: "passwordsmith",
-		occupation: "salesman",
-		personId: person.id
-	});
-
-	expect(employee.status).toBe(500);
-	expect(employee.body.errors[0]).toBe("Username UsernameLuke already registered.");
-
-	const personEmployee = await request(api).post("/employee").send({
-		name: "Jane",
-		birthDate: "1989-01-15",
-		type: "Individual",
-		personEmployee: {
-			username: "UsernameLara",
-			password: "passwordjane",
-			occupation: "cashier"
-		}
-	});
-
-	expect(personEmployee.status).toBe(500);
-	expect(personEmployee.body.errors[0]).toBe("Username UsernameLara already registered.");
-});
-
-test("Return all employee", async () => {
+test("Return all employees", async () => {
 	const response = await request(api).get("/employees").send();
-
+	
 	expect(response.status).toBe(200);
 	expect(response.body).toHaveLength(3);
 	expect(response.body[0].personEmployee.username).toBe("UsernameJohn")
@@ -97,6 +70,60 @@ test("It does not create employee without username", async () => {
 	expect(Employee.status).toBe(500);
 	expect(Employee.body.errors).toHaveLength(1);
 	expect(Employee.body.errors[0]).toBe("Field 'Username' must be filled");
+});
+
+test("It does not create employee with username already regitered", async () => {
+    const person = (await PersonSupport.findPeopleByName("Smith")).body[0];
+	const employee = await request(api).post("/employee").send({
+		username: "UsernameLuke",
+		password: "passwordsmith",
+		occupation: "salesman",
+		personId: person.id
+	});
+
+	expect(employee.status).toBe(500);
+	expect(employee.body.errors[0]).toBe("Username UsernameLuke already registered.");
+
+	const personEmployee = await request(api).post("/employee").send({
+		name: "Jane",
+		birthDate: "1989-01-15",
+		type: "Individual",
+		personEmployee: {
+			username: "UsernameLara",
+			password: "passwordjane",
+			occupation: "cashier"
+		}
+	});
+
+	expect(personEmployee.status).toBe(500);
+	expect(personEmployee.body.errors[0]).toBe("Username UsernameLara already registered.");
+});
+
+test("It does not create employee for person who does not exists", async () => {
+	const Employee = await request(api).post("/employee").send({
+		username: "newusername",
+		password: "passwordsmith",
+		occupation: "salesman",
+		personId: -1
+	});
+
+	expect(Employee.status).toBe(500);
+	expect(Employee.body.errors).toHaveLength(1);
+	expect(Employee.body.errors[0]).toBe("Does not exists a person with id -1.");
+});
+
+test("It does not create employee for person when person has already been an employee", async () => {
+	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
+	const Employee = await request(api).post("/employee").send({
+		username: "newusername",
+		password: "passwordsmith",
+		occupation: "salesman",
+		personId: person.id
+	});
+
+	expect(Employee.status).toBe(500);
+	expect(Employee.body.errors).toHaveLength(1);
+	expect(Employee.body.errors[0]).toBe("Person Luke has already been an Employee.");
 });
 
 test("It does not create employee without password", async () => {

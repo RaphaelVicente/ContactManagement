@@ -16,7 +16,7 @@ class EmployeeController {
 
 				return res.json(newPersonEmployee);
 			} catch (error) {
-				return res.status(500).json({ errors: [error] });
+				return res.status(500).json({ errors: [error.message] });
 			}
 		}
 
@@ -27,6 +27,16 @@ class EmployeeController {
 
 			if (employee)
 				return res.status(500).json({ errors: [`Username ${username} already registered.`] });
+
+			const person = await Person.findByPk(req.body.personId, {
+				include: { model: Employee, as: "personEmployee" }
+			});
+
+			if (!person)
+				return res.status(500).json({ errors: [`Does not exists a person with id ${req.body.personId}.`] });
+			
+			if (person.personEmployee)
+				return res.status(500).json({ errors: [`Person ${person.name} has already been an Employee.`] });
 
 			const newPersonEmployee = await Employee.create(req.body);
 

@@ -20,7 +20,8 @@ class PersonSupport {
 			{ name: "Michael", birthDate: "1998-01-25", type: "Individual" }
         ];
         
-        entries.forEach(async person => people.push(await request(api).post("/person").send(person)));
+        for (let person of entries)
+            people.push(await request(api).post("/person").send(person))
 
         return people;
     }

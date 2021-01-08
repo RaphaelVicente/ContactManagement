@@ -12,7 +12,8 @@ class EmployeeSupport {
 			{ username: "UsernameLuke", password: "passwordluke", occupation: "salesman", personId: people[2].id }
         ];
 
-        entries.forEach(async employee => employees.push(await request(api).post("/employee").send(employee)));
+        for (let employee of entries)
+            employees.push(await request(api).post("/employee").send(employee));
 
         return employees;
     }

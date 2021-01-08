@@ -1,29 +1,31 @@
-const errorHandler = require("../utils/errorHandler");
-
 class AddressValidator {
 	validateCreationData(req, res, next) {
 		const address = req.body;
+		let errors = [];
 
 		if (!address.neighborhood)
-			return errorHandler("Field 'Neighborhood' must be filled", req, res);
+			errors.push("Field 'Neighborhood' must be filled");
 
 		if (!address.zipcode)
-			return errorHandler("Field 'Zipcode' must be filled", req, res);
+			errors.push("Field 'Zipcode' must be filled");
 
 		if (!address.street)
-			return errorHandler("Field 'Street' must be filled", req, res);
+			errors.push("Field 'Street' must be filled");
 
 		if (!address.number)
-			return errorHandler("Field 'Number' must be filled", req, res);
+			errors.push("Field 'Number' must be filled");
 
 		if (!Number.isInteger(address.number))
-			return errorHandler("'Number' must contain only numbers", req, res);
+			errors.push("'Number' must contain only numbers");
 
 		if (!address.cityId)
-			return errorHandler("Field 'City Id' must be filled", req, res);
+			errors.push("Field 'City Id' must be filled");
 
 		if (!address.personId)
-			return errorHandler("Field 'Person Id' must be filled", req, res);
+			errors.push("Field 'Person Id' must be filled");
+
+		if (errors.length > 0)
+			return res.status(500).json({ errors: errors });
 
 		next();
 	}
