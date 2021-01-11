@@ -1,5 +1,5 @@
 const request = require("supertest");
-const api = require("../../src/api");
+const api = require("../../../src/api");
 
 class CitySupport {
 	async createCity(state) {

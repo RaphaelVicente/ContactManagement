@@ -1,8 +1,8 @@
 const request = require("supertest");
 
 const api = require("../../src/api");
-const truncate = require("../utils/truncate");
-const CountrySupport = require("../utils/CountrySupport");
+const truncate = require("./support/truncate");
+const CountrySupport = require("./support/CountrySupport");
 
 beforeEach(async () => {
 	await truncate();

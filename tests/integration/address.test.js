@@ -1,12 +1,12 @@
 const request = require("supertest");
 
 const api = require("../../src/api");
-const truncate = require("../utils/truncate");
-const CountrySupport = require("../utils/CountrySupport");
-const StateSupport = require("../utils/StateSupport");
-const CitySupport = require("../utils/CitySupport");
-const AddressSupport = require("../utils/AddressSupport");
-const PersonSupport = require("../utils/PersonSupport");
+const truncate = require("./support/truncate");
+const CountrySupport = require("./support/CountrySupport");
+const StateSupport = require("./support/StateSupport");
+const CitySupport = require("./support/CitySupport");
+const AddressSupport = require("./support/AddressSupport");
+const PersonSupport = require("./support/PersonSupport");
 
 beforeEach(async () => {
 	await truncate();

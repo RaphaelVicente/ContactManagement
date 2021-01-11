@@ -1,4 +1,4 @@
-const Connection = require('../../src/api/models/index');
+const Connection = require('../../../src/api/models/index');
 
 module.exports = () => {
 	return Promise.all(Object.keys(Connection.models).map(key => {
