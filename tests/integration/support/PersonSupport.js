@@ -2,15 +2,15 @@ const request = require("supertest");
 const api = require("../../../src/api");
 
 class PersonSupport {
-    async createPerson() {
-        return await request(api).post("/person").send({
+    async createPerson(token) {
+        return await request(api).post("/au/person").set('Authorization', token).send({
             name: "Luke",
             birthDate: "1977-11-18",
             type: "Individual"
         });
     }
 
-    async createFivePeople() {
+    async createFivePeople(token) {
         let people = [];
         let entries = [
             { name: "John", birthDate: "1992-07-21", type: "Individual" },
@@ -21,13 +21,13 @@ class PersonSupport {
         ];
         
         for (let person of entries)
-            people.push(await request(api).post("/person").send(person))
+            people.push(await request(api).post("/au/person").set('Authorization', token).send(person))
 
         return people;
     }
 
-    async findPeopleByName(name) {
-        return await request(api).get(`/people/${name}`).send();
+    async findPeopleByName(name, token) {
+        return await request(api).get(`/au/people/${name}`).set('Authorization', token).send();
     }
 }
 

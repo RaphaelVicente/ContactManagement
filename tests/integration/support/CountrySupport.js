@@ -1,9 +1,18 @@
 const request = require("supertest");
 const api = require("../../../src/api");
+const Support = require("./Support");
 
-class CountrySupport {
-	async createCountry() {
-		return await request(api).post('/country').send({ name: "Brasil", countryCode: 55 });
+class CountrySupport extends Support {
+	constructor() {
+		super();
+	}
+
+	async createCountry(country) {
+		return await request(api).post("/au/country").set('Authorization', this.token).send(country);
+	}
+
+	async createBrazil() {
+		return await this.createCountry({ name: "Brazil", countryCode: 55 });
 	}
 
 	async createFiveCountries() {
@@ -17,17 +26,17 @@ class CountrySupport {
 		];
 
 		for (let country of entries)
-			countries.push(await request(api).post('/country').send(country));
+			countries.push(await request(api).post('/au/country').set('Authorization', this.token).send(country));
 
 		return countries;
 	}
 
-	async findAllCountries() {
-		return await request(api).get('/countries').send();
+	async getAllCountries() {
+		return await request(api).get('/au/countries').set('Authorization', this.token).send();
 	}
 
-	async findCountryByName(name) {
-		return await request(api).get(`/country/${name}`).send();
+	async getCountryByName(name) {
+		return await request(api).get(`/au/country/${name}`).set('Authorization', this.token).send();
 	}
 }
 

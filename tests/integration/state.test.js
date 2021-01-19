@@ -1,14 +1,13 @@
 const request = require("supertest");
 
-const api = require("../../src/api");
-const truncate = require("./support/truncate");
+const CountryCreated = require("./environment/CountryCreated");
 const CountrySupport = require("./support/CountrySupport");
 const StateSupport = require("./support/StateSupport");
 
 beforeEach(async () => {
-	await truncate();
-	const resps = await CountrySupport.createFiveCountries();
-	await StateSupport.createFiveStates(resps[0].body);
+	await CountryCreated.start();
+	await StateSupport.authenticateEmployee();
+	await StateSupport.createFiveStates();
 });
 
 test("Create state", async () => {

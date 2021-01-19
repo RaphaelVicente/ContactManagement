@@ -1,5 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const { authRoutes, unauthRoutes } = require("./routes");
 const cors = require("cors");
 require("./api/models")
 
@@ -26,7 +27,8 @@ class ApiController {
 	}
 
 	routes() {
-		this.express.use(require("./routes"));
+		this.express.use("/au", authRoutes);
+		this.express.use("/unau", unauthRoutes);
 	}
 }
 

@@ -1,3 +1,6 @@
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+
 const Person = require("../models/Person");
 const Employee = require("../models/Employee");
 
@@ -12,6 +15,8 @@ class EmployeeController {
 				if (employee)
 					return res.status(500).json({ errors: [`Username ${username} already registered.`] });
 
+				const salt = bcrypt.genSaltSync(10);
+				req.body.personEmployee.password = bcrypt.hashSync(req.body.personEmployee.password, salt);
 				const newPersonEmployee = await Person.create(req.body, { include: { model: Employee, as: "personEmployee" } });
 
 				return res.json(newPersonEmployee);
@@ -34,13 +39,16 @@ class EmployeeController {
 
 			if (!person)
 				return res.status(500).json({ errors: [`Does not exists a person with id ${req.body.personId}.`] });
-			
+
 			if (person.personEmployee)
 				return res.status(500).json({ errors: [`Person ${person.name} has already been an Employee.`] });
 
-			const newPersonEmployee = await Employee.create(req.body);
+			const salt = bcrypt.genSaltSync(10);
+			req.body.password = bcrypt.hashSync(req.body.password, salt);
 
-			return res.json(newPersonEmployee);
+			const newEmployee = await Employee.create(req.body);
+
+			return res.json(newEmployee);
 		} catch (error) {
 			return res.status(500).json({ errors: [error] });
 		}
@@ -75,6 +83,44 @@ class EmployeeController {
 		} catch (error) {
 			return res.status(500).json({ errors: [error] });
 		}
+	}
+
+	async authenticateEmployee(req, res) {
+		const { username, password } = req.body;
+
+		try {
+			const employee = await Employee.findOne({
+				where: { username: username },
+				include: { model: Person, as: "personEmployee" }
+			});
+
+			if (!employee || bcrypt.compareSync(password, employee.password))
+				return res.status(500).json({ errors: ["Incorrect username or password"] });
+
+			const expireTime = process.env.TOKEN_EXPIRE_TIME || "3h";
+			const token = jwt.sign({ username: employee.username }, process.env.AUTH_SECRET, { expiresIn: expireTime });
+
+			return res.json({
+				token: token,
+				authUser: { name: employee.personEmployee.name, username: employee.username }
+			});
+		} catch (error) {
+			return res.status(500).json({ errors: [error] });
+		}
+	}
+
+	async validateToken(req, res) {
+		const token = req.body.token || "";
+
+		jwt.verify(token, process.env.AUTH_SECRET, function (err, decoded) {
+			if (!decoded)
+				return res.status(500).json({ errors: ["Invalid token"] });
+
+			return res.status(200).json({
+				valid: !err,
+				authUser: !err ? { username: decoded.authUser.username } : {}
+			});
+		});
 	}
 }
 

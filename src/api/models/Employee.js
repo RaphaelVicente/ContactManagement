@@ -6,27 +6,17 @@ class Employee extends Model {
         super.init({
             username: DataTypes.STRING,
             password: DataTypes.STRING,
-            occupation: DataTypes.STRING
+            occupation: DataTypes.STRING,
+            isAdmin: DataTypes.BOOLEAN
         },
         {
             sequelize,
             tableName: "employee"
-        },
-        {
-            hooks: {
-                beforeSave: async employee => {
-                    employee.password = await bcrypt.hash(employee.password, 8);
-                }
-            }
         });
     }
 
     static associate(models) {
         this.belongsTo(models.Person, { foreignKey: "personId", as: "personEmployee"});
-    }
-
-    checkPassword(password) {
-        return bcrypt.compareSync(password, this.password);
     }
 }
 

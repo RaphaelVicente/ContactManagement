@@ -1,23 +1,24 @@
 const request = require("supertest");
 
-const api = require("../../src/api");
-const truncate = require("./support/truncate");
+const BigBang = require("./environment/BigBang");
 const CountrySupport = require("./support/CountrySupport");
 
 beforeEach(async () => {
-	await truncate();
+	await BigBang.start();
+	await CountrySupport.authenticateEmployee();
 	await CountrySupport.createFiveCountries();
 });
 
 test("Create country", async () => {
-	const response = await request(api).post("/country").send({ name: "Switzerland", countryCode: 41 });
+	const response = await CountrySupport.createCountry({ name: "Switzerland", countryCode: 41 });
 
 	expect(response.status).toBe(200);
 	expect(response.body.name).toBe("Switzerland");
+	expect(response.body.countryCode).toBe(41);
 });
 
 test("Return all countries", async () => {
-	const response = await request(api).get("/countries").send();
+	const response = await CountrySupport.getAllCountries();
 
 	expect(response.status).toBe(200);
 	expect(response.body).toHaveLength(5);
@@ -29,7 +30,7 @@ test("Return all countries", async () => {
 });
 
 test("Return a country by name", async () => {
-	const response = await request(api).get("/country/England").send();
+	const response = await CountrySupport.getCountryByName("England");
 
 	expect(response.status).toBe(200);
 	expect(response.body.name).toBe("England");
@@ -37,7 +38,7 @@ test("Return a country by name", async () => {
 });
 
 test("It does not create country without code", async () => {
-	const response = await request(api).post("/country").send({ name: "Switzerland" });
+	const response = await CountrySupport.createCountry({ name: "Switzerland" });
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(2);
@@ -46,7 +47,7 @@ test("It does not create country without code", async () => {
 });
 
 test("It does not create country with invalid code", async () => {
-	const response = await request(api).post("/country").send({ name: "England", countryCode: "4a" });
+	const response = await CountrySupport.createCountry({ name: "England", countryCode: "4a" });
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -54,7 +55,7 @@ test("It does not create country with invalid code", async () => {
 });
 
 test("It does not create country without name", async () => {
-	const response = await request(api).post("/country").send({ countryCode: 41 });
+	const response = await CountrySupport.createCountry({ countryCode: 41 });
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -62,7 +63,7 @@ test("It does not create country without name", async () => {
 });
 
 test("It does not create country with invalid name", async () => {
-	const response = await request(api).post("/country").send({ name: "England1", countryCode: 44 });
+	const response = await CountrySupport.createCountry({ name: "England1", countryCode: 44 });
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -70,7 +71,7 @@ test("It does not create country with invalid name", async () => {
 });
 
 test("It does not create country without any information", async () => {
-	const response = await request(api).post("/country").send({});
+	const response = await CountrySupport.createCountry({ });
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(3);

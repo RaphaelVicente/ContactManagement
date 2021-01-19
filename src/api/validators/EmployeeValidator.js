@@ -11,6 +11,9 @@ class EmployeeValidator {
 
 		if (!employee.occupation)
 			errors.push("Field 'Occupation' must be filled");
+			
+		if (employee.isAdmin === null || employee.isAdmin === undefined)
+			errors.push("Field 'Is Admin' must be filled");
 
 		if (!req.body.personEmployee && !employee.personId)
 			errors.push("Field 'Person Id' must be filled");

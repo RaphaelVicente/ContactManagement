@@ -1,12 +1,20 @@
 const request = require("supertest");
 const api = require("../../../src/api");
+const Support = require("./Support");
 
-class StateSupport {
-	async createState(country) {
-		return await request(api).post('/state').send({ name: "Parana", abbreviation: "PR", countryId: country.id });
+class StateSupport extends Support {
+	async createState(state) {
+		return await request(api).post('/au/state').set('Authorization', this.token).send(state);
 	}
 	
-	async createFiveStates(country) {
+	async createParana(country) {
+		return await this.createState({ name: "Parana", abbreviation: "PR", countryId: country.id });
+	}
+
+	async createFiveStates() {
+		const resp = await request(api).get('/au/country/Brazil').set('Authorization', this.token).send();
+		const country = resp.body;
+
 		let states = [];
 		let entries = [
 			{ name: "Parana", abbreviation: "PR", countryId: country.id },
@@ -17,17 +25,19 @@ class StateSupport {
 		];
 
 		for (let state of entries)
-			states.push(await request(api).post('/state').send(state));
+			states.push(await request(api).post('/au/state').set('Authorization', this.token).send(state));
 
 		return states;
 	}
 
-	async findAllStates() {
-		return await request(api).get('/states').send();
+	async getAllStates() {
+		const resp = await request(api).get('/au/states').set('Authorization', this.token).send();
+		return resp.body;
 	}
 
-	async findStateByName(name) {
-		return await request(api).get(`/state/${name}`).send();
+	async getStateByName(name) {
+		const resp = await request(api).get(`/au/state/${name}`).set('Authorization', this.token).send();
+		return resp.body;
 	}
 }
 

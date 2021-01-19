@@ -4,12 +4,15 @@
 	"description": "",
 	"main": "./src/server.js",
 	"scripts": {
-		"dev": "nodemon --ignore tests",
-		"start": "node src/server.js",
+		"dev": "nodemon -r dotenv/config --ignore tests",
+		"start": "node -r dotenv/config src/server.js",
 		"pretest": "NODE_ENV=test sequelize-cli db:migrate",
 		"test": "NODE_ENV=test jest --runInBand",
 		"posttest": "NODE_ENV=test sequelize-cli db:migrate:undo:all",
 		"synctables": "sequelize-cli db:migrate"
+	},
+	"jest": {
+		"setupFiles": ["dotenv/config"]
 	},
 	"author": "Raphael",
 	"license": "ISC",

@@ -5,7 +5,7 @@ module.exports = {
 
   collectCoverage: true,
 
-  collectCoverageFrom: ["src/**", "!src/database/migrations/**"],
+  collectCoverageFrom: ["src/**", "!src/database/**"],
 
   coverageDirectory: "tests/coverage",
 

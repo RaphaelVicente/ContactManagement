@@ -1,4 +1,8 @@
-const routes = require("express").Router();
+const express = require("express");
+const authRoutes = express.Router();
+const unauthRoutes = express.Router();
+
+const auth = require('./auth')
 
 const AddressController = require("./api/controllers/AddressController");
 const CityController = require("./api/controllers/CityController");
@@ -16,34 +20,42 @@ const EmployeeValidator = require("./api/validators/EmployeeValidator");
 const PersonValidator = require("./api/validators/PersonValidator");
 const StateValidator = require("./api/validators/StateValidator");
 
-routes.post("/address", AddressValidator.validateCreationData, AddressController.create);
-routes.get("/addresses", AddressController.getAll);
-routes.get("/city/:cityId/addresses", AddressController.getAddressesFromCity);
-routes.get("/person/:personId/addresses", AddressController.getAddressesFromPerson);
+unauthRoutes.post('/auth', EmployeeController.authenticateEmployee);
+unauthRoutes.post('/validateToken', EmployeeController.validateToken);
 
-routes.post("/city", CityValidator.validateCreationData, CityController.create);
-routes.get("/cities", CityController.getAll);
-routes.get("/city/:name", CityController.getByName);
-routes.get("/state/:stateId/cities", CityController.getCitiesFromState);
+authRoutes.use(auth);
 
-routes.post("/contact", ContactValidator.validateCreationData, ContactController.create);
-routes.get("/person/:personId/contacts", ContactController.getContactsFromPerson);
+authRoutes.post("/address", AddressValidator.validateCreationData, AddressController.create);
+authRoutes.get("/addresses", AddressController.getAll);
+authRoutes.get("/city/:cityId/addresses", AddressController.getAddressesFromCity);
+authRoutes.get("/person/:personId/addresses", AddressController.getAddressesFromPerson);
 
-routes.post("/country", CountryValidator.validateCreationData, CountryController.create);
-routes.get("/countries", CountryController.getAll);
-routes.get("/country/:name", CountryController.getByName);
+authRoutes.post("/city", CityValidator.validateCreationData, CityController.create);
+authRoutes.get("/cities", CityController.getAll);
+authRoutes.get("/city/:name", CityController.getByName);
+authRoutes.get("/state/:stateId/cities", CityController.getCitiesFromState);
 
-routes.post("/employee", EmployeeValidator.validateCreationData, EmployeeController.create);
-routes.get("/employees", EmployeeController.getAll);
-routes.get("/employee/:username", EmployeeController.getByUsername);
+authRoutes.post("/contact", ContactValidator.validateCreationData, ContactController.create);
+authRoutes.get("/person/:personId/contacts", ContactController.getContactsFromPerson);
 
-routes.post("/person", PersonValidator.validateCreationData, PersonController.create);
-routes.get("/people", PersonController.getAll);
-routes.get("/people/:name", PersonController.getByName);
+authRoutes.post("/country", CountryValidator.validateCreationData, CountryController.create);
+authRoutes.get("/countries", CountryController.getAll);
+authRoutes.get("/country/:name", CountryController.getByName);
 
-routes.post("/state", StateValidator.validateCreationData, StateController.create);
-routes.get("/states", StateController.getAll);
-routes.get("/state/:name", StateController.getByName);
-routes.get("/country/:countryId/states", StateController.getStatesFromCountry);
+authRoutes.post("/employee", EmployeeValidator.validateCreationData, EmployeeController.create);
+authRoutes.get("/employees", EmployeeController.getAll);
+authRoutes.get("/employee/:username", EmployeeController.getByUsername);
 
-module.exports = routes;
+authRoutes.post("/person", PersonValidator.validateCreationData, PersonController.create);
+authRoutes.get("/people", PersonController.getAll);
+authRoutes.get("/people/:name", PersonController.getByName);
+
+authRoutes.post("/state", StateValidator.validateCreationData, StateController.create);
+authRoutes.get("/states", StateController.getAll);
+authRoutes.get("/state/:name", StateController.getByName);
+authRoutes.get("/country/:countryId/states", StateController.getStatesFromCountry);
+
+module.exports = {
+    authRoutes: authRoutes,
+    unauthRoutes: unauthRoutes
+};
