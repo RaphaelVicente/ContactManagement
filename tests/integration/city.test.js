@@ -1,28 +1,22 @@
-const request = require("supertest");
-
-const api = require("../../src/api");
-const truncate = require("./support/truncate");
-const CountrySupport = require("./support/CountrySupport");
-const StateSupport = require("./support/StateSupport");
+const StateCreated = require("./environment/StateCreated");
 const CitySupport = require("./support/CitySupport");
 
 beforeEach(async () => {
-	await truncate();
-	const countries = await CountrySupport.createFiveCountries();
-	const states = await StateSupport.createFiveStates(countries[0].body);
-	await CitySupport.createFiveCities(states[0].body);
+	await StateCreated.start();
+	await CitySupport.authenticateEmployee();
+	await CitySupport.createFiveCities();
 });
 
 test("Create city", async () => {
-	const state = (await StateSupport.findStateByName("Sao Paulo")).body;
-	const response = await request(api).post("/city").send({ name: "Tupa", areaCode: 14, stateId: state.id });
+	const response = await CitySupport.createCity({ name: "Tupa", areaCode: 14 }, "Sao Paulo");
 
 	expect(response.status).toBe(200);
 	expect(response.body.name).toBe("Tupa");
+	expect(response.body.areaCode).toBe(14);
 });
 
 test("Return a city by name", async () => {
-	const response = await request(api).get("/city/Pinhais").send();
+	const response = await CitySupport.getCityByName("Pinhais");
 
 	expect(response.status).toBe(200);
 	expect(response.body.name).toBe("Pinhais");
@@ -30,7 +24,7 @@ test("Return a city by name", async () => {
 });
 
 test("Return all cities", async () => {
-	const response = await request(api).get("/cities").send();
+	const response = await CitySupport.getAllCities();
 
 	expect(response.status).toBe(200);
 	expect(response.body).toHaveLength(5);
@@ -42,11 +36,8 @@ test("Return all cities", async () => {
 });
 
 test("Return all cities from state", async () => {
-	const parana = (await StateSupport.findStateByName("Parana")).body;
-	const citiesParana = await request(api).get(`/state/${parana.id}/cities`).send();
-
-	const saoPaulo = (await StateSupport.findStateByName("Sao Paulo")).body;
-	const citiesSaoPaulo = await request(api).get(`/state/${saoPaulo.id}/cities`).send();
+	const citiesParana = await CitySupport.getCitiesFromState("Parana");
+	const citiesSaoPaulo = await CitySupport.getCitiesFromState("Sao Paulo");
 
 	expect(citiesParana.status).toBe(200);
 	expect(citiesParana.body).toHaveLength(5);
@@ -61,8 +52,7 @@ test("Return all cities from state", async () => {
 });
 
 test("It does not create city without name", async () => {
-	const state = (await StateSupport.findStateByName("Sao Paulo")).body;
-	const response = await request(api).post("/city").send({ areaCode: 14, stateId: state.id });
+	const response = await CitySupport.createCity({ areaCode: 14, }, "Sao Paulo");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -70,8 +60,7 @@ test("It does not create city without name", async () => {
 });
 
 test("It does not create city with invalid name", async () => {
-	const state = (await StateSupport.findStateByName("Sao Paulo")).body;
-	const response = await request(api).post("/city").send({ name: "Tupa1", areaCode: 14, stateId: state.id });
+	const response = await CitySupport.createCity({ name: "Tupa1", areaCode: 14 }, "Sao Paulo");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -79,8 +68,7 @@ test("It does not create city with invalid name", async () => {
 });
 
 test("It does not create city without area code", async () => {
-	const state = (await StateSupport.findStateByName("Sao Paulo")).body;
-	const response = await request(api).post("/city").send({ name: "Tupa", stateId: state.id });
+	const response = await CitySupport.createCity({ name: "Tupa" }, "Sao Paulo");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(2);
@@ -89,8 +77,7 @@ test("It does not create city without area code", async () => {
 });
 
 test("It does not create city with invalid area code", async () => {
-	const state = (await StateSupport.findStateByName("Sao Paulo")).body;
-	const response = await request(api).post("/city").send({ name: "Tupa", areaCode: "14a", stateId: state.id });
+	const response = await CitySupport.createCity({ name: "Tupa", areaCode: "14a" }, "Sao Paulo");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -98,7 +85,7 @@ test("It does not create city with invalid area code", async () => {
 });
 
 test("It does not create city without state", async () => {
-	const response = await request(api).post("/city").send({ name: "Tupa", areaCode: 14 });
+	const response = await CitySupport.createCity({ name: "Tupa", areaCode: 14 }, "");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -106,7 +93,7 @@ test("It does not create city without state", async () => {
 });
 
 test("It does not create city without any information", async () => {
-	const response = await request(api).post("/city").send({});
+	const response = await CitySupport.createCity({}, "");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(4);

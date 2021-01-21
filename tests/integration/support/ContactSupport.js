@@ -1,16 +1,23 @@
 const request = require("supertest");
 const api = require("../../../src/api");
+const Support = require("./Support");
 
-class ContactSupport {
-	async createContact(person) {
-		return await request(api).post("/contact").send({
-			contactType: "Work",
-			countryCode: 55,
-			areaCode: 44,
-			number: 30323032,
-			email: "luke@test.com",
-			personId: person.id
-		});
+class ContactSupport extends Support {
+	async createContact(contact, personName) {
+		const personResp = await request(api).get(`/au/people/${personName}`).set("Authorization", this.token).send();
+        const person = personResp.body[0];
+
+        if (person)
+            contact.personId = person.id;
+		
+		return await request(api).post("/au/contact").set("Authorization", this.token).send(contact);
+	}
+
+	async getContactsFromPerson(personName) {
+		const personResp = await request(api).get(`/au/people/${personName}`).set("Authorization", this.token).send();
+		const person = personResp.body[0];
+		
+		return await request(api).get(`/au/person/${person.id}/contacts`).set("Authorization", this.token).send();
 	}
 }
 

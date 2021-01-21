@@ -8,7 +8,7 @@ class CountrySupport extends Support {
 	}
 
 	async createCountry(country) {
-		return await request(api).post("/au/country").set('Authorization', this.token).send(country);
+		return await request(api).post("/au/country").set("Authorization", this.token).send(country);
 	}
 
 	async createBrazil() {
@@ -26,17 +26,17 @@ class CountrySupport extends Support {
 		];
 
 		for (let country of entries)
-			countries.push(await request(api).post('/au/country').set('Authorization', this.token).send(country));
+			countries.push(await request(api).post("/au/country").set("Authorization", this.token).send(country));
 
 		return countries;
 	}
 
 	async getAllCountries() {
-		return await request(api).get('/au/countries').set('Authorization', this.token).send();
+		return await request(api).get("/au/countries").set("Authorization", this.token).send();
 	}
 
 	async getCountryByName(name) {
-		return await request(api).get(`/au/country/${name}`).set('Authorization', this.token).send();
+		return await request(api).get(`/au/country/${name}`).set("Authorization", this.token).send();
 	}
 }
 

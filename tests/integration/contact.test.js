@@ -1,26 +1,28 @@
-const request = require("supertest");
-
-const api = require("../../src/api");
-const truncate = require("./support/truncate");
-const PersonSupport = require("./support/PersonSupport");
+const PersonCreated = require("./environment/PersonCreated");
 const ContactSupport = require("./support/ContactSupport");
 
 beforeEach(async () => {
-	await truncate();
-	await PersonSupport.createPerson();
+	await PersonCreated.start();
+	await ContactSupport.authenticateEmployee();
+	await ContactSupport.createContact({
+		contactType: "Private",
+		countryCode: 55,
+		areaCode: 44,
+		number: 30303030,
+		email: "luke@test.com"
+	},
+	"Luke");
 });
 
 test("Create contact", async () => {
-	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
-
-	const response = await request(api).post("/contact").send({
+	const response = await ContactSupport.createContact({
 		contactType: "Work",
 		countryCode: 55,
 		areaCode: 44,
 		number: 30323032,
-		email: "luke@test.com",
-		personId: person.id
-	});
+		email: "luke@test.com"
+	},
+	"Luke");
 
 	expect(response.status).toBe(200);
 	expect(response.body.contactType).toBe("Work");
@@ -31,30 +33,26 @@ test("Create contact", async () => {
 });
 
 test("Return all contacts from person", async () => {
-	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
-	await ContactSupport.createContact(person);
-	const response = await request(api).get(`/person/${person.id}/contacts`).send();
+	const response = await ContactSupport.getContactsFromPerson("Luke");
 
 	expect(response.status).toBe(200);
 	expect(response.body.name).toBe("Luke")
 	expect(response.body.personContacts).toHaveLength(1);
-	expect(response.body.personContacts[0].contactType).toBe("Work");
+	expect(response.body.personContacts[0].contactType).toBe("Private");
 	expect(response.body.personContacts[0].countryCode).toBe(55);
 	expect(response.body.personContacts[0].areaCode).toBe(44);
-	expect(response.body.personContacts[0].number).toBe(30323032);
+	expect(response.body.personContacts[0].number).toBe(30303030);
 	expect(response.body.personContacts[0].email).toBe("luke@test.com");
 });
 
 test("Create contact without email", async () => {
-	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
-
-	const response = await request(api).post("/contact").send({
+	const response = await ContactSupport.createContact({
 		contactType: "Work",
 		countryCode: 55,
 		areaCode: 44,
-		number: 30323032,
-		personId: person.id
-	});
+		number: 30323032
+	},
+	"Luke");
 
 	expect(response.status).toBe(200);
 	expect(response.body.contactType).toBe("Work");
@@ -65,15 +63,13 @@ test("Create contact without email", async () => {
 });
 
 test("It does not create contact without contact type", async () => {
-	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
-
-	const response = await request(api).post("/contact").send({
+	const response = await ContactSupport.createContact({
 		countryCode: 55,
 		areaCode: 44,
 		number: 30323032,
-		email: "luke@test.com",
-		personId: person.id
-	});
+		email: "luke@test.com"
+	},
+	"Luke");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -81,15 +77,13 @@ test("It does not create contact without contact type", async () => {
 });
 
 test("It does not create contact without country code", async () => {
-	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
-
-	const response = await request(api).post("/contact").send({
+	const response = await ContactSupport.createContact({
 		contactType: "Work",
 		areaCode: 44,
 		number: 30323032,
-		email: "luke@test.com",
-		personId: person.id
-	});
+		email: "luke@test.com"
+	},
+	"Luke");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(2);
@@ -98,15 +92,13 @@ test("It does not create contact without country code", async () => {
 });
 
 test("It does not create contact without area code", async () => {
-	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
-
-	const response = await request(api).post("/contact").send({
+	const response = await ContactSupport.createContact({
 		contactType: "Work",
 		countryCode: 55,
 		number: 30323032,
-		email: "luke@test.com",
-		personId: person.id
-	});
+		email: "luke@test.com"
+	},
+	"Luke");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(2);
@@ -115,15 +107,13 @@ test("It does not create contact without area code", async () => {
 });
 
 test("It does not create contact without number", async () => {
-	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
-
-	const response = await request(api).post("/contact").send({
+	const response = await ContactSupport.createContact({
 		contactType: "Work",
 		countryCode: 55,
 		areaCode: 44,
-		email: "luke@test.com",
-		personId: person.id
-	});
+		email: "luke@test.com"
+	},
+	"Luke");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(2);
@@ -132,9 +122,7 @@ test("It does not create contact without number", async () => {
 });
 
 test("It does not create contact without person", async () => {
-	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
-
-	const response = await request(api).post("/contact").send({
+	const response = await ContactSupport.createContact({
 		contactType: "Work",
 		countryCode: 55,
 		areaCode: 44,
@@ -148,16 +136,14 @@ test("It does not create contact without person", async () => {
 });
 
 test("It does not create contact with invalid email", async () => {
-	const person = (await PersonSupport.findPeopleByName("Luke")).body[0];
-
-	const response = await request(api).post("/contact").send({
+	const response = await ContactSupport.createContact({
 		contactType: "Work",
 		countryCode: 55,
 		areaCode: 44,
 		number: 30323032,
-		email: "@",
-		personId: person.id
-	});
+		email: "@"
+	},
+	"Luke");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);

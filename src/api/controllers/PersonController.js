@@ -7,7 +7,7 @@ class PersonController {
 			const newPerson = await Person.create(req.body);
 			return res.json(newPerson);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -16,7 +16,7 @@ class PersonController {
 			const people = await Person.findAll({ order: [["name", "ASC"]] });
 			return res.json(people);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -32,7 +32,7 @@ class PersonController {
 
 			return res.json(people);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 }

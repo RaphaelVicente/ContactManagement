@@ -3,16 +3,22 @@ const api = require("../../../src/api");
 const Support = require("./Support");
 
 class StateSupport extends Support {
-	async createState(state) {
-		return await request(api).post('/au/state').set('Authorization', this.token).send(state);
+	async createState(state, countryName) {
+		const resp = await request(api).get(`/au/country/${countryName}`).set("Authorization", this.token).send();
+		const country = resp.body;
+
+		if (country)
+			state.countryId = country.id;
+
+		return await request(api).post("/au/state").set("Authorization", this.token).send(state);
 	}
 	
-	async createParana(country) {
-		return await this.createState({ name: "Parana", abbreviation: "PR", countryId: country.id });
+	async createParana() {
+		return await this.createState({ name: "Parana", abbreviation: "PR" }, "Brazil");
 	}
 
 	async createFiveStates() {
-		const resp = await request(api).get('/au/country/Brazil').set('Authorization', this.token).send();
+		const resp = await request(api).get("/au/country/Brazil").set("Authorization", this.token).send();
 		const country = resp.body;
 
 		let states = [];
@@ -25,19 +31,26 @@ class StateSupport extends Support {
 		];
 
 		for (let state of entries)
-			states.push(await request(api).post('/au/state').set('Authorization', this.token).send(state));
+			states.push(await request(api).post("/au/state").set("Authorization", this.token).send(state));
 
 		return states;
 	}
 
 	async getAllStates() {
-		const resp = await request(api).get('/au/states').set('Authorization', this.token).send();
-		return resp.body;
+		const states = await request(api).get("/au/states").set("Authorization", this.token).send();
+		return states;
 	}
 
 	async getStateByName(name) {
-		const resp = await request(api).get(`/au/state/${name}`).set('Authorization', this.token).send();
-		return resp.body;
+		const state = await request(api).get(`/au/state/${name}`).set("Authorization", this.token).send();
+		return state;
+	}
+
+	async getStatesFromCountry(countryName) {
+		const resp = await request(api).get(`/au/country/${countryName}`).set("Authorization", this.token).send();
+		const country = resp.body;
+		const states = await request(api).get(`/au/country/${country.id}/states`).set("Authorization", this.token).send();
+		return states;
 	}
 }
 

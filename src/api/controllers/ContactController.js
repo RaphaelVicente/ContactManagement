@@ -7,7 +7,7 @@ class ContactController {
 			const contact = await Contact.create(req.body);
 			return res.json(contact);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -22,7 +22,7 @@ class ContactController {
 
 			return res.json(person);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 }

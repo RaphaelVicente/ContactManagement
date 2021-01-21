@@ -6,7 +6,7 @@ class CountryController {
 			const country = await Country.create(req.body);
 			return res.json(country);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -15,7 +15,7 @@ class CountryController {
 			const countries = await Country.findAll({ order: [["name", "ASC"]] });
 			return res.json(countries);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -25,7 +25,7 @@ class CountryController {
 			const country = await Country.findOne({ where: { name: name } });
 			return res.json(country);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 }

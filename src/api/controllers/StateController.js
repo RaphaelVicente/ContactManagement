@@ -7,7 +7,7 @@ class StateController {
 			const state = await State.create(req.body);
 			return res.json(state);
 		} catch (error) {
-			return res.status(500).json({ errors: error })
+			return res.status(500).json({ errors: [error.message] })
 		}
 	}
 
@@ -16,7 +16,7 @@ class StateController {
 			const states = await State.findAll({ order: [["name", "ASC"]] });
 			return res.json(states);
 		} catch (error) {
-			return res.status(500).json({ errors: error })
+			return res.status(500).json({ errors: [error.message] })
 		}
 	}
 
@@ -31,7 +31,7 @@ class StateController {
 
 			return res.json(country.countryStates);
 		} catch (error) {
-			return res.status(500).json({ errors: error })
+			return res.status(500).json({ errors: [error.message] })
 		}
 	}
 
@@ -43,7 +43,7 @@ class StateController {
 
 			return res.json(state);
 		} catch (error) {
-			return res.status(500).json({ errors: error })
+			return res.status(500).json({ errors: [error.message] })
 		}
 	}
 }

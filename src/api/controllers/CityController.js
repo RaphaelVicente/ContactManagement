@@ -7,7 +7,7 @@ class CityController {
 			const city = await City.create(req.body);
 			return res.json(city);
 		} catch (error) {
-			return res.status(500).json({ errors: errors });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -16,7 +16,7 @@ class CityController {
 			const cities = await City.findAll({ order: [["name", "ASC"]] });
 			return res.json(cities);
 		} catch (error) {
-			return res.status(500).json({ errors: errors });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -31,7 +31,7 @@ class CityController {
 
 			return res.json(state.stateCities);
 		} catch (error) {
-			return res.status(500).json({ errors: errors });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -42,7 +42,7 @@ class CityController {
 			const city = await City.findOne({ where: { name: name } });
 			return res.json(city);
 		} catch (error) {
-			return res.status(500).json({ errors: errors });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 }

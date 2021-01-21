@@ -1,28 +1,22 @@
 const request = require("supertest");
-const Connection = require('../../../src/api/models/index');
 const api = require("../../../src/api");
+const Support = require("./Support");
 
-class EmployeeSupport {
-	async createStarterPerson() {
-		await Connection.queryInterface.bulkInsert('person', [
-			{ name: "Admin", birth_date: "1989-01-01", type: "Individual", created_at: new Date(), updated_at: new Date() }
-		]);
+class EmployeeSupport extends Support {
+	async createEmployee(employee, personName) {
+		if (personName) {
+			const resp = await request(api).get(`/au/people/${personName}`).set("Authorization", this.token).send();
+			const person = resp.body[0];
 
-		const people = await Connection.queryInterface.sequelize.query('SELECT id from person');
-		const person = people[0][0];
+			if (person)
+				employee.personId = person.id;
+		}
 
-		await Connection.queryInterface.bulkInsert('employee', [
-			{ username: "admin", password: "admin", occupation: "admin", is_admin: true, person_id: person.id, created_at: new Date(), updated_at: new Date() }
-		]);
+		return await request(api).post("/au/employee").set("Authorization", this.token).send(employee);
 	}
 
-	async authenticateEmployee() {
-		return await request(api).post("/unau/auth")
-			.send({ username: "admin", password: "admin" });
-	}
-
-	async createThreeEmployees(token) {
-		const response = await request(api).get("/au/people").set('Authorization', token).send();
+	async createThreeEmployees() {
+		const response = await request(api).get("/au/people").set("Authorization", this.token).send();
 		const people = response.body;
 		let employees = [];
 		let entries = [
@@ -32,9 +26,21 @@ class EmployeeSupport {
 		];
 
 		for (let employee of entries)
-			employees.push(await request(api).post("/au/employee").set('Authorization', token).send(employee));
+			employees.push(await request(api).post("/au/employee").set("Authorization", this.token).send(employee));
 
 		return employees;
+	}
+
+	async getAllEmployees() {
+		return await request(api).get("/au/employees").set("Authorization", this.token).send();
+	}
+
+	async getEmployeeByUsername(username) {
+		return await request(api).get(`/au/employee/${username}`).set("Authorization", this.token).send();
+	}
+
+	async authEmployee(employee) {
+		return await request(api).post("/unau/auth").send(employee);
 	}
 }
 

@@ -1,16 +1,14 @@
-const request = require("supertest");
-
-const api = require("../../src/api");
-const truncate = require("./support/truncate");
+const CityCreated = require("./environment/CityCreated");
 const PersonSupport = require("./support/PersonSupport");
 
 beforeEach(async () => {
-	await truncate();
+	await CityCreated.start();
+	await PersonSupport.authenticateEmployee();
 	await PersonSupport.createFivePeople();
 });
 
 test("Create person", async () => {
-	const response = await request(api).post("/person").send({
+	const response = await PersonSupport.createPerson({
 		name: "Lucasfilm",
 		birthDate: "1971-01-01",
 		type: "Legal"
@@ -23,7 +21,7 @@ test("Create person", async () => {
 });
 
 test("Return people by name", async () => {
-	const response = await request(api).get("/people/Luke").send();
+	const response = await PersonSupport.getPeopleByName("Luke");
 
 	expect(response.status).toBe(200);
 	expect(response.body).toHaveLength(1);
@@ -33,19 +31,20 @@ test("Return people by name", async () => {
 });
 
 test("Return all people", async () => {
-	const response = await request(api).get("/people").send();
+	const response = await PersonSupport.getPeople();
 
 	expect(response.status).toBe(200);
-	expect(response.body).toHaveLength(5);
-	expect(response.body[0].name).toBe("John");
-	expect(response.body[1].name).toBe("Lara");
-	expect(response.body[2].name).toBe("Luke");
-	expect(response.body[3].name).toBe("Michael");
-	expect(response.body[4].name).toBe("Smith");
+	expect(response.body).toHaveLength(6);
+	expect(response.body[0].name).toBe("Admin");
+	expect(response.body[1].name).toBe("John");
+	expect(response.body[2].name).toBe("Lara");
+	expect(response.body[3].name).toBe("Luke");
+	expect(response.body[4].name).toBe("Michael");
+	expect(response.body[5].name).toBe("Smith");
 });
 
 test("It does not create person without name", async () => {
-	const response = await request(api).post("/person").send({
+	const response = await PersonSupport.createPerson({
 		birthDate: "1977-11-18",
 		type: "Individual"
 	});
@@ -56,7 +55,7 @@ test("It does not create person without name", async () => {
 });
 
 test("It does not create person with invalid name", async () => {
-	const response = await request(api).post("/person").send({
+	const response = await PersonSupport.createPerson({
 		name: "Luke 2",
 		birthDate: "1977-11-18",
 		type: "Individual"
@@ -68,7 +67,7 @@ test("It does not create person with invalid name", async () => {
 });
 
 test("It does not create person without birth date", async () => {
-	const response = await request(api).post("/person").send({
+	const response = await PersonSupport.createPerson({
 		name: "Luke",
 		type: "Individual"
 	});
@@ -80,7 +79,7 @@ test("It does not create person without birth date", async () => {
 });
 
 test("It does not create person with invalid birth date", async () => {
-	const response = await request(api).post("/person").send({
+	const response = await PersonSupport.createPerson({
 		name: "Luke",
 		birthDate: "1977-18-11",
 		type: "Individual"
@@ -92,7 +91,7 @@ test("It does not create person with invalid birth date", async () => {
 });
 
 test("It does not create person without type", async () => {
-	const response = await request(api).post("/person").send({
+	const response = await PersonSupport.createPerson({
 		name: "Luke",
 		birthDate: "1977-11-18"
 	});
@@ -103,15 +102,14 @@ test("It does not create person without type", async () => {
 });
 
 test("It does not find people without name", async () => {
-	const name = null;
-	const response = await request(api).get(`/people/${name}`).send();
+	const response = await PersonSupport.getPeopleByName(null);
 
 	expect(response.status).toBe(200);
 	expect(response.body).toHaveLength(0);
 });
 
 test("It does not create person without any information", async () => {
-	const response = await request(api).post("/person").send({});
+	const response = await PersonSupport.createPerson({});
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(4);

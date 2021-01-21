@@ -16,7 +16,15 @@ class BigBang {
 		const person = people[0][0];
 
 		await Connection.queryInterface.bulkInsert('employee', [
-			{ username: "admin", password: "admin", occupation: "admin", is_admin: true, person_id: person.id, created_at: new Date(), updated_at: new Date() }
+            { 
+                username: "admin",
+                password: "$2a$10$l2QTZteyoakQUUvq4diQEueUSTen8Fb42/13ikRGnsx13ugOdgPx2",
+                occupation: "admin",
+                is_admin: true,
+                person_id: person.id,
+                created_at: new Date(),
+                updated_at: new Date()
+            }
 		]);
     }
 }

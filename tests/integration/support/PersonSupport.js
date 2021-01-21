@@ -1,16 +1,21 @@
 const request = require("supertest");
 const api = require("../../../src/api");
+const Support = require("./Support");
 
-class PersonSupport {
-    async createPerson(token) {
-        return await request(api).post("/au/person").set('Authorization', token).send({
+class PersonSupport extends Support {
+    async createPerson() {
+        return await request(api).post("/au/person").set("Authorization", this.token).send({
             name: "Luke",
             birthDate: "1977-11-18",
             type: "Individual"
         });
     }
 
-    async createFivePeople(token) {
+    async createPerson(person) {
+        return await request(api).post("/au/person").set("Authorization", this.token).send(person);
+    }
+
+    async createFivePeople() {
         let people = [];
         let entries = [
             { name: "John", birthDate: "1992-07-21", type: "Individual" },
@@ -21,13 +26,17 @@ class PersonSupport {
         ];
         
         for (let person of entries)
-            people.push(await request(api).post("/au/person").set('Authorization', token).send(person))
+            people.push(await request(api).post("/au/person").set("Authorization", this.token).send(person));
 
         return people;
     }
 
-    async findPeopleByName(name, token) {
-        return await request(api).get(`/au/people/${name}`).set('Authorization', token).send();
+    async getPeopleByName(name) {
+        return await request(api).get(`/au/people/${name}`).set("Authorization", this.token).send();
+	}
+	
+	async getPeople() {
+        return await request(api).get("/au/people").set("Authorization", this.token).send();
     }
 }
 

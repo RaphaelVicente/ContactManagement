@@ -1,7 +1,4 @@
-const request = require("supertest");
-
 const CountryCreated = require("./environment/CountryCreated");
-const CountrySupport = require("./support/CountrySupport");
 const StateSupport = require("./support/StateSupport");
 
 beforeEach(async () => {
@@ -11,15 +8,15 @@ beforeEach(async () => {
 });
 
 test("Create state", async () => {
-	const resp = await CountrySupport.findCountryByName("Brazil");
-	const response = await request(api).post("/state").send({ name: "Mato Grosso", abbreviation: "MT", countryId: resp.body.id })
+	const response = await StateSupport.createState({ name: "Mato Grosso", abbreviation: "MT" }, "Brazil");
 
 	expect(response.status).toBe(200);
 	expect(response.body.name).toBe("Mato Grosso");
+	expect(response.body.abbreviation).toBe("MT");
 });
 
 test("Return a state by name", async () => {
-	const response = await request(api).get("/state/Parana").send();
+	const response = await StateSupport.getStateByName("Parana");
 
 	expect(response.status).toBe(200);
 	expect(response.body.name).toBe("Parana");
@@ -27,7 +24,7 @@ test("Return a state by name", async () => {
 });
 
 test("Return all states", async () => {
-	const response = await request(api).get("/states").send();
+	const response = await StateSupport.getAllStates();
 
 	expect(response.status).toBe(200);
 	expect(response.body).toHaveLength(5);
@@ -39,11 +36,8 @@ test("Return all states", async () => {
 });
 
 test("Return all states from country", async () => {
-	const brasil = (await CountrySupport.findCountryByName("Brazil")).body;
-	const statesBrasil = await request(api).get(`/country/${brasil.id}/states`).send();
-
-	const inglaterra = (await CountrySupport.findCountryByName("England")).body;
-	const statesInglaterra = await request(api).get(`/country/${inglaterra.id}/states`).send();
+	const statesBrasil = await StateSupport.getStatesFromCountry("Brazil");
+	const statesInglaterra = await StateSupport.getStatesFromCountry("England")
 
 	expect(statesBrasil.status).toBe(200);
 	expect(statesBrasil.body).toHaveLength(5);
@@ -58,17 +52,15 @@ test("Return all states from country", async () => {
 });
 
 test("It does not create state without name", async () => {
-	const resp = await CountrySupport.findCountryByName("Brazil");
-	const response = await request(api).post("/state").send({ abbreviation: "MT", countryId: resp.body.id })
-
+	const response = await StateSupport.createState({ abbreviation: "MT" }, "Brazil");
+	
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
 	expect(response.body.errors[0]).toBe("Field 'Name' must be filled");
 });
 
 test("It does not create state with invalid name", async () => {
-	const resp = await CountrySupport.findCountryByName("Brazil");
-	const response = await request(api).post("/state").send({ name: "Mato Grosso2", abbreviation: "MT", countryId: resp.body.id })
+	const response = await StateSupport.createState({ name: "Mato Grosso2", abbreviation: "MT" }, "Brazil");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -76,8 +68,7 @@ test("It does not create state with invalid name", async () => {
 });
 
 test("It does not create state without abbreviation", async () => {
-	const resp = await CountrySupport.findCountryByName("Brazil");
-	const response = await request(api).post("/state").send({ name: "Mato Grosso", countryId: resp.body.id })
+	const response = await StateSupport.createState({ name: "Mato Grosso" }, "Brazil");
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -85,8 +76,7 @@ test("It does not create state without abbreviation", async () => {
 });
 
 test("It does not create state with invalid abbreviation", async () => {
-	const resp = await CountrySupport.findCountryByName("Brazil");
-	const response = await request(api).post("/state").send({ name: "Mato Grosso", abbreviation: "MT2", countryId: resp.body.id })
+	const response = await StateSupport.createState({ name: "Mato Grosso", abbreviation: "MT2" }, "Brazil")
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -94,7 +84,7 @@ test("It does not create state with invalid abbreviation", async () => {
 });
 
 test("It does not create state without country", async () => {
-	const response = await request(api).post("/state").send({ name: "Mato Grosso", abbreviation: "MT" })
+	const response = await StateSupport.createState({ name: "Mato Grosso", abbreviation: "MT" }, "")
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(1);
@@ -102,7 +92,7 @@ test("It does not create state without country", async () => {
 });
 
 test("It does not create state without any information", async () => {
-	const response = await request(api).post("/state").send({})
+	const response = await StateSupport.createState({ }, "")
 
 	expect(response.status).toBe(500);
 	expect(response.body.errors).toHaveLength(3);

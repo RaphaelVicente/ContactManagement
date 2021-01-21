@@ -50,7 +50,7 @@ class EmployeeController {
 
 			return res.json(newEmployee);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -66,7 +66,7 @@ class EmployeeController {
 
 			return res.json(people);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -81,7 +81,7 @@ class EmployeeController {
 
 			return res.json(employee);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -94,8 +94,8 @@ class EmployeeController {
 				include: { model: Person, as: "personEmployee" }
 			});
 
-			if (!employee || bcrypt.compareSync(password, employee.password))
-				return res.status(500).json({ errors: ["Incorrect username or password"] });
+			if (!employee || !bcrypt.compareSync(password, employee.password))
+				return res.status(403).json({ errors: ["Incorrect username or password"] });
 
 			const expireTime = process.env.TOKEN_EXPIRE_TIME || "3h";
 			const token = jwt.sign({ username: employee.username }, process.env.AUTH_SECRET, { expiresIn: expireTime });
@@ -105,7 +105,7 @@ class EmployeeController {
 				authUser: { name: employee.personEmployee.name, username: employee.username }
 			});
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 

@@ -8,7 +8,7 @@ class AddressController {
 			const address = await Address.create(req.body);
 			return res.json(address);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -17,7 +17,7 @@ class AddressController {
 			const addresses = await Address.findAll();
 			return res.json(addresses);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -32,7 +32,7 @@ class AddressController {
 
 			return res.json(person.personAddresses);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 
@@ -47,7 +47,7 @@ class AddressController {
 
 			return res.json(city.cityAddresses);
 		} catch (error) {
-			return res.status(500).json({ errors: [error] });
+			return res.status(500).json({ errors: [error.message] });
 		}
 	}
 }
