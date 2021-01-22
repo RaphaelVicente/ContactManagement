@@ -180,7 +180,7 @@ test("It does not create employee without any information", async () => {
 });
 
 test("It does not authenticate employee with incorrect password", async () => {
-	const employee = await EmployeeSupport.authEmployee({	
+	const employee = await EmployeeSupport.authEmployee({
 		username: "UsernameJohn",
 		password: "password"
 	});
@@ -188,4 +188,20 @@ test("It does not authenticate employee with incorrect password", async () => {
 	expect(employee.status).toBe(403);
 	expect(employee.body.errors).toHaveLength(1);
 	expect(employee.body.errors[0]).toBe("Incorrect username or password");
+});
+
+test("It verifies token is valid", async () => {
+	const employee = await EmployeeSupport.validateToken();
+
+	expect(employee.status).toBe(200);
+	expect(employee.body.valid).toBe(true);
+	expect(employee.body.authUser.username).toBe("admin");
+});
+
+test("It verifies token is not valid", async () => {
+	const employee = await EmployeeSupport.validateToken(true);
+
+	expect(employee.status).toBe(403);
+	expect(employee.body.errors).toHaveLength(1);
+	expect(employee.body.errors[0]).toBe("Invalid token");
 });

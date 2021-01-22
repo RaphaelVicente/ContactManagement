@@ -114,11 +114,11 @@ class EmployeeController {
 
 		jwt.verify(token, process.env.AUTH_SECRET, function (err, decoded) {
 			if (!decoded)
-				return res.status(500).json({ errors: ["Invalid token"] });
+				return res.status(403).json({ errors: ["Invalid token"] });
 
 			return res.status(200).json({
 				valid: !err,
-				authUser: !err ? { username: decoded.authUser.username } : {}
+				authUser: !err ? { username: decoded.username } : {}
 			});
 		});
 	}

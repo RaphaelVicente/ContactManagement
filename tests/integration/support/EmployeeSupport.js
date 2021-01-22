@@ -42,6 +42,11 @@ class EmployeeSupport extends Support {
 	async authEmployee(employee) {
 		return await request(api).post("/unau/auth").send(employee);
 	}
+
+	async validateToken(changeToken) {
+		const newToken = changeToken ? JSON.parse(this.token) + "inv" : JSON.parse(this.token);
+		return await request(api).post("/unau/validateToken").send({ token: newToken });
+	}
 }
 
 module.exports = new EmployeeSupport();
