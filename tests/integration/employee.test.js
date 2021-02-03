@@ -4,7 +4,7 @@ const EmployeeSupport = require("./support/EmployeeSupport");
 beforeEach(async () => {
 	await PersonCreated.start();
 	await EmployeeSupport.authenticateEmployee();
-    await EmployeeSupport.createThreeEmployees();
+	await EmployeeSupport.createThreeEmployees();
 });
 
 test("Create employee", async () => {
@@ -14,7 +14,7 @@ test("Create employee", async () => {
 		occupation: "salesman",
 		isAdmin: false
 	},
-	"Smith");
+		"Smith");
 
 	expect(employee.status).toBe(200);
 	expect(employee.body.username).toBe("UsernameSmith");
@@ -41,7 +41,7 @@ test("Create person and employee", async () => {
 
 test("Return all employees", async () => {
 	const response = await EmployeeSupport.getAllEmployees();
-	
+
 	expect(response.status).toBe(200);
 	expect(response.body).toHaveLength(4);
 	expect(response.body[0].personEmployee.username).toBe("admin");
@@ -65,7 +65,7 @@ test("It does not create employee without username", async () => {
 		occupation: "salesman",
 		isAdmin: false
 	},
-	"Smith");
+		"Smith");
 
 	expect(employee.status).toBe(500);
 	expect(employee.body.errors).toHaveLength(1);
@@ -79,7 +79,7 @@ test("It does not create employee with username already regitered", async () => 
 		occupation: "salesman",
 		isAdmin: false
 	},
-	"Smith");
+		"Smith");
 
 	expect(employee.status).toBe(500);
 	expect(employee.body.errors[0]).toBe("Username UsernameLuke already registered.");
@@ -121,7 +121,7 @@ test("It does not create employee for person when person has already been an emp
 		occupation: "salesman",
 		isAdmin: false
 	},
-	"Luke");
+		"Luke");
 
 	expect(employee.status).toBe(500);
 	expect(employee.body.errors).toHaveLength(1);
@@ -134,7 +134,7 @@ test("It does not create employee without password", async () => {
 		occupation: "salesman",
 		isAdmin: false
 	},
-	"Smith");
+		"Smith");
 
 	expect(employee.status).toBe(500);
 	expect(employee.body.errors).toHaveLength(1);
@@ -147,7 +147,7 @@ test("It does not create employee without occupation", async () => {
 		password: "passwordsmith",
 		isAdmin: false
 	},
-	"Smith");
+		"Smith");
 
 	expect(employee.status).toBe(500);
 	expect(employee.body.errors).toHaveLength(1);
@@ -160,7 +160,7 @@ test("It does not create employee without is admin", async () => {
 		password: "passwordsmith",
 		occupation: "salesman"
 	},
-	"Smith");
+		"Smith");
 
 	expect(employee.status).toBe(500);
 	expect(employee.body.errors).toHaveLength(1);

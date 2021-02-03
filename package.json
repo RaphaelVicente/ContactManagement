@@ -9,7 +9,8 @@
 		"pretest": "NODE_ENV=test sequelize-cli db:migrate",
 		"test": "NODE_ENV=test jest --runInBand",
 		"posttest": "NODE_ENV=test sequelize-cli db:migrate:undo:all",
-		"synctables": "sequelize-cli db:migrate"
+		"synctables": "sequelize-cli db:migrate",
+		"createadmin": "sequelize-cli db:seed:all"
 	},
 	"jest": {
 		"setupFiles": ["dotenv/config"]

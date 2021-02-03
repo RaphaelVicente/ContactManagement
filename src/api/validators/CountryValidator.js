@@ -1,13 +1,13 @@
 class CountryValidator {
-    validateCreationData(req, res, next) {
+	validateCreationData(req, res, next) {
 		const country = req.body;
 		let errors = [];
 
 		if (!country.name)
 			errors.push("Field 'Name' must be filled");
-		
+
 		const regexNameValidator = /^[A-Za-z\s]+$/;
-		
+
 		if (!regexNameValidator.test(country.name))
 			errors.push("Invalid 'Name'");
 
@@ -18,8 +18,8 @@ class CountryValidator {
 			errors.push("'Country Code' must contain only numbers");
 
 		if (errors.length > 0)
-            return res.status(500).json({errors: errors});
-		
+			return res.status(500).json({ errors: errors });
+
 		next();
 	}
 }

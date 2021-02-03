@@ -2,13 +2,13 @@ const Connection = require('../../../src/api/models/index');
 const truncate = require("../support/truncate");
 
 class BigBang {
-    static async start() {
-        await truncate();
-        await this.createStarterPerson();
-    }
+	static async start() {
+		await truncate();
+		await this.createStarterPerson();
+	}
 
-    static async createStarterPerson() {
-        await Connection.queryInterface.bulkInsert('person', [
+	static async createStarterPerson() {
+		await Connection.queryInterface.bulkInsert('person', [
 			{ name: "Admin", birth_date: "1989-01-01", type: "Individual", created_at: new Date(), updated_at: new Date() }
 		]);
 
@@ -16,17 +16,17 @@ class BigBang {
 		const person = people[0][0];
 
 		await Connection.queryInterface.bulkInsert('employee', [
-            { 
-                username: "admin",
-                password: "$2a$10$l2QTZteyoakQUUvq4diQEueUSTen8Fb42/13ikRGnsx13ugOdgPx2",
-                occupation: "admin",
-                is_admin: true,
-                person_id: person.id,
-                created_at: new Date(),
-                updated_at: new Date()
-            }
+			{
+				username: "admin",
+				password: "$2a$10$l2QTZteyoakQUUvq4diQEueUSTen8Fb42/13ikRGnsx13ugOdgPx2",
+				occupation: "admin",
+				is_admin: true,
+				person_id: person.id,
+				created_at: new Date(),
+				updated_at: new Date()
+			}
 		]);
-    }
+	}
 }
 
 module.exports = BigBang;

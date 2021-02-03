@@ -56,6 +56,6 @@ authRoutes.get("/state/:name", StateController.getByName);
 authRoutes.get("/country/:countryId/states", StateController.getStatesFromCountry);
 
 module.exports = {
-    authRoutes: authRoutes,
-    unauthRoutes: unauthRoutes
+	authRoutes: authRoutes,
+	unauthRoutes: unauthRoutes
 };

@@ -1,17 +1,17 @@
 module.exports = {
-  bail: true,
+	bail: true,
 
-  clearMocks: true,
+	clearMocks: true,
 
-  collectCoverage: true,
+	collectCoverage: true,
 
-  collectCoverageFrom: ["src/**", "!src/database/**"],
+	collectCoverageFrom: ["src/**", "!src/database/**"],
 
-  coverageDirectory: "tests/coverage",
+	coverageDirectory: "tests/coverage",
 
-  testEnvironment: "node",
+	testEnvironment: "node",
 
-  testMatch: [
-    "**/tests/**/*.test.js?(x)"
-  ]
+	testMatch: [
+		"**/tests/**/*.test.js?(x)"
+	]
 };
